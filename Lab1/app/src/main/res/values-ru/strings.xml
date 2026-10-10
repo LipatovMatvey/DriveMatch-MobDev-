@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Drive Match</string>
+    <string name="notice_not_implemented">Функционал пока не реализован</string>
+    <string name="drive_front">Передний привод</string>
+    <string name="drive_rear">Задний привод</string>
+    <string name="drive_all">Полный привод</string>
+
+    <string name="fuel_petrol">Бензин</string>
+    <string name="fuel_diesel">Дизель</string>
+
+    <string name="color_white">Белый</string>
+    <string name="color_black">Чёрный</string>
+    <string name="color_gray">Серый</string>
+    <string name="color_red">Красный</string>
+    <string name="color_blue">Синий</string>
+
+    <string name="spec_power">Мощность</string>
+    <string name="spec_engine_volume">Объём двигателя</string>
+    <string name="spec_drive">Привод</string>
+    <string name="spec_fuel">Тип двигателя</string>
+    <string name="spec_color">Цвет</string>
+    <string name="spec_year">Год выпуска</string>
+
+    <string name="value_hp">%1$d л.с.</string>
+    <string name="value_volume">%1$.1f л</string>
+    <string name="price_per_hour">%1$d ₽ / час</string>
+
+    <string name="car_photo_description">Фото %1$d из %2$d</string>
+</resources>

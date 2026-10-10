@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.laba1"
+    namespace = "com.example.drivematch"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.laba1"
+        applicationId = "com.example.drivematch"
         minSdk = 33
         targetSdk = 37
         versionCode = 1
@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.runtime.saveable)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
@@ -55,4 +56,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation("androidx.compose.ui:ui-text-google-fonts")
 }
