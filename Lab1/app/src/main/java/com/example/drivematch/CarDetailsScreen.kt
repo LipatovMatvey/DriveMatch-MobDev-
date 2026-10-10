@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.ui.theme.AppTheme
 
+
 @Composable
 fun CarDetailsScreen(
     car: Car,
