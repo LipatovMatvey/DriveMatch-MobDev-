@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Laba1</string>
+    <string name="name_project">DriveMatch</string>
+    <string name="developers">Кузнецов Н.\nЛипатов М.</string>
+    <string name="cool_guy">крутой чел</string>
+    <string name="greeting_guest">Привет, гость!</string>
+    <string name="greeting_user">Привет, %1$s!</string>
+    <string name="driver_license_confirmed">Водительское удостоверение подтверждено</string>
+    <string name="driver_license_question">У вас есть права?</string>
+    <string name="book_car">Забронируйте автомобиль</string>
+    <string name="happy_journey">Счастливого пути!</string>
+    <string name="choose_car">Выбрать автомобиль</string>
+    <string name="time_in_app">Время в приложении: %1$d сек.</string>
+    <string name="not_implemented">Функционал в разработке</string>
 </resources>

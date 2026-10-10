@@ -9,15 +9,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,21 +37,20 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 
-
 fun ComponentActivity.notifyState(stateName: String) {
     Toast.makeText(
-        this, "Переход в состояние: $stateName",
-        Toast.LENGTH_SHORT
+        this, "Переход в состояние: $stateName", Toast.LENGTH_SHORT
     ).show()
 }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        notifyState("onCreate() (Activity создана)")
+        //notifyState("onCreate() (Activity создана)")
         enableEdgeToEdge()
         setContent {
             MaterialTheme {
@@ -58,31 +61,31 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        notifyState("onStart (Activity стала видимой)")
+        //notifyState("onStart (Activity стала видимой)")
     }
 
     override fun onResume() {
         super.onResume()
-        notifyState("onResume() (Activity активна)")
+        //notifyState("onResume() (Activity активна)")
     }
 
     override fun onPause() {
-        notifyState("onPause() (Activity приостановлена)")
+        //notifyState("onPause() (Activity приостановлена)")
         super.onPause()
     }
 
     override fun onStop() {
-        notifyState("onStop() (Activity невидима)")
+        //notifyState("onStop() (Activity невидима)")
         super.onStop()
     }
 
     override fun onRestart() {
         super.onRestart()
-        notifyState("onRestart() (Activity перезапущена)")
+        //notifyState("onRestart() (Activity перезапущена)")
     }
 
     override fun onDestroy() {
-        notifyState("onDestroy() (Activity уничтожена)")
+        //notifyState("onDestroy() (Activity уничтожена)")
         super.onDestroy()
     }
 }
@@ -98,11 +101,15 @@ fun CarsharingContainer() {
         }
     }
 
-    var isCarBooked = remember { mutableStateOf(false) }
+    val isCarBooked = rememberSaveable { mutableStateOf(false) }
 
-    var secondsPassed = remember { mutableIntStateOf(0) }
+    val secondsPassed = rememberSaveable { mutableIntStateOf(0) }
 
-    val greetingSubject = remember {mutableStateOf("Гость")}
+    val displayName = if (isCarBooked.value) {
+        stringResource(R.string.cool_guy)
+    } else {
+        stringResource(R.string.greeting_guest)
+    }
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -112,35 +119,31 @@ fun CarsharingContainer() {
     }
 
     DisposableEffect(Unit) {
-        notifyEffect("Экран каршеринга создан")
+        //notifyEffect("Экран каршеринга создан")
         onDispose {
             notifyEffect("Экран каршеринга уничтожается")
         }
     }
 
     CarsharingScreen(
-        nameOrganizations = "DriveMatch",
-        nameDirectors = "Кузнецов Н.\nЛипатов М.",
-        greetingText = "Привет, ${greetingSubject.value}!",
+        greetingText = stringResource(R.string.greeting_user, displayName),
         seconds = secondsPassed.value,
         isCarBooked = isCarBooked.value,
-        onBookToggle = { isCarBooked.value = it }
+        onBookToggle = { isCarBooked.value = it },
     )
 }
 
 @Composable
 fun CarsharingScreen(
-    nameOrganizations: String,
-    nameDirectors: String,
     greetingText: String,
     seconds: Int,
     isCarBooked: Boolean,
-    onBookToggle: (Boolean) -> Unit
+    onBookToggle: (Boolean) -> Unit,
 ) {
     Text(
-        text = nameOrganizations,
+        text = stringResource(R.string.name_project),
         style = MaterialTheme.typography.headlineMedium,
-        color = Color.Red,
+        color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 30.dp),
@@ -153,16 +156,16 @@ fun CarsharingScreen(
             .padding(16.dp)
     ) {
         Text(
-            text = nameDirectors,
+            text = stringResource(R.string.developers),
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 80.dp),
             textAlign = TextAlign.End
         )
+
         Spacer(modifier = Modifier.height(24.dp))
     }
-
 
     Column(
         modifier = Modifier
@@ -172,15 +175,15 @@ fun CarsharingScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Spacer(modifier = Modifier.height(50.dp))
+
         Text(
-            text = greetingText,
-            style = MaterialTheme.typography.headlineMedium
+            text = greetingText, style = MaterialTheme.typography.headlineMedium
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Время аренды: $seconds сек.",
+            text = stringResource(R.string.time_in_app, seconds),
             style = MaterialTheme.typography.bodyLarge
         )
 
@@ -189,54 +192,58 @@ fun CarsharingScreen(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = if (isCarBooked) "Водительское удостоверение\nподтверждено" else "У вас есть права?")
+            Text(
+                text = if (isCarBooked) {
+                    stringResource(R.string.driver_license_confirmed)
+                } else {
+                    stringResource(R.string.driver_license_question)
+                }
+            )
+
             Spacer(modifier = Modifier.width(8.dp))
+
             Switch(
-                checked = isCarBooked,
-                onCheckedChange = onBookToggle
+                checked = isCarBooked, onCheckedChange = onBookToggle
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = if (isCarBooked) "Счастливого пути!" else "Забронируйте автомобиль",
+            text = if (isCarBooked) stringResource(R.string.happy_journey)
+            else stringResource(R.string.book_car),
             style = MaterialTheme.typography.bodyLarge
         )
 
         Spacer(modifier = Modifier.height(45.dp))
 
         val context = LocalContext.current
+
         Button(
-            onClick = {
-                if (isCarBooked){
+            enabled = isCarBooked, onClick = {
+                if (isCarBooked) {
                     context.startActivity(
-                        Intent(context, MainActivity2::class.java))
+                        Intent(context, MainActivity2::class.java)
+                    )
                 }
-            }
-        ) {
-            Text("Выбрать автомобиль")
+            }) {
+            Text(
+                stringResource(R.string.choose_car)
+            )
         }
     }
-
 }
 
 @Preview(
-    showBackground = true,
-    name = "Каршеринг — не забронирован",
-    widthDp = 360,
-    heightDp = 640
+    showBackground = true, name = "Каршеринг — не забронирован", widthDp = 360, heightDp = 640
 )
 @Composable
 fun CarsharingScreenPreview() {
     MaterialTheme {
         CarsharingScreen(
-            nameOrganizations = "DriveMatch",
-            nameDirectors = "Кузнецов Н.\nЛипатов М.",
             greetingText = "Привет, гость!",
-            seconds = 42,
-            isCarBooked = false,
-            onBookToggle = { _ -> }
-        )
+            seconds = 67,
+            isCarBooked = true,
+            onBookToggle = { _ -> })
     }
 }
