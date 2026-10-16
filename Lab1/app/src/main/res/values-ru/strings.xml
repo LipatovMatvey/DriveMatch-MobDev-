@@ -17,6 +17,7 @@
 
     <string name="spec_power">Мощность</string>
     <string name="spec_engine_volume">Объём двигателя</string>
+    <string name="spec_transmission_type">Тип КПП</string>
     <string name="spec_drive">Привод</string>
     <string name="spec_fuel">Тип двигателя</string>
     <string name="spec_color">Цвет</string>
@@ -27,4 +28,14 @@
     <string name="price_per_hour">%1$d ₽ / час</string>
 
     <string name="car_photo_description">Фото %1$d из %2$d</string>
+    <string name="transmission_mt">МКПП</string>
+    <string name="transmission_at">АКПП</string>
+
+    <string name="favs_label">Избранное</string>
+    <string name="home_label">Главная</string>
+    <string name="cars_label">Автомобили</string>
+
+    <string name="car_title_with_year">%1$s %2$s (%3$d)</string>
+    <string name="rent_car">Арендовать</string>
+    <string name="add_to_favourite">Избранное</string>
 </resources>

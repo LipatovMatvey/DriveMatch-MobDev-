@@ -1,6 +1,7 @@
 package com.example.drivematch
 
 import androidx.annotation.StringRes
+import com.example.drivematch.R
 
 enum class DriveType(@StringRes val labelRes: Int) {
     FRONT(R.string.drive_front),
@@ -13,7 +14,13 @@ enum class FuelType(@StringRes val labelRes: Int) {
     DIESEL(R.string.fuel_diesel)
 }
 
+enum class TransmissionType(@StringRes val labelRes: Int) {
+    MT(R.string.transmission_mt),
+    AT(R.string.transmission_at)
+}
+
 data class Car(
+    val id: Int,
     val brand: String,
     val model: String,
     val pricePerHour: Int,
@@ -22,34 +29,7 @@ data class Car(
     val engineVolume: Double,
     val driveType: DriveType,
     val fuelType: FuelType,
+    val transmissionType: TransmissionType,
     @StringRes val colorRes: Int,
     val year: Int
-)
-
-// временные данные для экрана и превью
-val sampleCar = Car(
-    brand = "Skoda",
-    model = "Octavia",
-    pricePerHour = 350,
-    photos = listOf(
-        R.drawable.skoda_octavia_1,
-        R.drawable.skoda_octavia_4,
-        R.drawable.skoda_octavia_5,
-        R.drawable.skoda_octavia_2,
-        R.drawable.skoda_octavia_6,
-        R.drawable.skoda_octavia_7,
-        R.drawable.skoda_octavia_3,
-        R.drawable.skoda_octavia_8,
-        R.drawable.skoda_octavia_10,
-        R.drawable.skoda_octavia_11,
-        R.drawable.skoda_octavia_12,
-        R.drawable.skoda_octavia_13,
-        R.drawable.skoda_octavia_14
-    ),
-    horsepower = 150,
-    engineVolume = 1.4,
-    driveType = DriveType.FRONT,
-    fuelType = FuelType.PETROL,
-    colorRes = R.string.color_white,
-    year = 2021
 )
