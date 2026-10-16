@@ -8,7 +8,11 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -43,7 +47,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.drivematch.ui.theme.AppTheme
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Card
+import androidx.compose.material3.ListItem
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
@@ -178,26 +186,92 @@ fun CarsharingScreen(
     modifier: Modifier = Modifier,
     nameOrganizations: String
 ) {
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = nameOrganizations,
             color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.align(Alignment.TopCenter)
+            style = MaterialTheme.typography.headlineMedium
         )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.home_tagline),
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(24.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            StatCard(
+                value = stringResource(R.string.home_stat_years_value),
+                label = stringResource(R.string.home_stat_years_label),
+                modifier = Modifier.weight(1f)
+            )
+            StatCard(
+                value = carsData.size.toString(),
+                label = stringResource(R.string.home_stat_cars_label),
+                modifier = Modifier.weight(1f)
+            )
+            StatCard(
+                value = stringResource(R.string.home_stat_support_value),
+                label = stringResource(R.string.home_stat_support_label),
+                modifier = Modifier.weight(1f)
+            )
+        }
+        Spacer(Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.home_about),
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Spacer(Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.home_why_title),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.align(Alignment.Start)
+        )
+        listOf(
+            R.string.home_adv_1,
+            R.string.home_adv_2,
+            R.string.home_adv_3,
+            R.string.home_adv_4
+        ).forEach { res ->
+            ListItem(
+                leadingContent = {
+                    Icon(
+                        Icons.Filled.Check,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                headlineContent = { Text(stringResource(res)) }
+            )
+        }
+    }
+}
 
+@Composable
+private fun StatCard(value: String, label: String, modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .fillMaxWidth()
+                .padding(vertical = 15.dp, horizontal = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // содержимое главного экрана добавим позже
+            Text(
+                text = value,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -217,7 +291,7 @@ fun FavouritesScreen(modifier: Modifier = Modifier) {
     )
 }
 
-@Preview(showBackground = true, name = "Всё приложение", widthDp = 360, heightDp = 640)
+@Preview(showBackground = true, name = "Всё приложение", widthDp = 360, heightDp = 750, locale = "ru")
 @Composable
 fun CarsharingContainerPreview() {
     AppTheme {

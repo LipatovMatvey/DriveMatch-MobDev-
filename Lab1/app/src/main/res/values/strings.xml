@@ -5,6 +5,19 @@
     <string name="drive_rear">Rear-wheel drive</string>
     <string name="drive_all">All-wheel drive</string>
 
+    <string name="home_tagline">Car sharing for those who value their time</string>
+    <string name="home_stat_years_value">5+</string>
+    <string name="home_stat_years_label">years on the market</string>
+    <string name="home_stat_cars_label">cars in fleet</string>
+    <string name="home_stat_support_value">24/7</string>
+    <string name="home_stat_support_label">support</string>
+    <string name="home_about">We have been operating since 2020 and built a large fleet: from economy cars to premium SUVs and electric cars. Book in a couple of minutes and pay only for the time you drive.</string>
+    <string name="home_why_title">Why choose us</string>
+    <string name="home_adv_1">Hourly rental with no hidden fees</string>
+    <string name="home_adv_2">All cars are insured and regularly serviced</string>
+    <string name="home_adv_3">Different drive types, fuels and transmissions</string>
+    <string name="home_adv_4">Quick sign-up, no office visit needed</string>
+
     <string name="fuel_petrol">Petrol</string>
     <string name="fuel_diesel">Diesel</string>
     <string name="fuel_electro">Electro</string>

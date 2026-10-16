@@ -6,6 +6,19 @@
     <string name="drive_rear">Задний привод</string>
     <string name="drive_all">Полный привод</string>
 
+    <string name="home_tagline">Каршеринг для тех, кто ценит время</string>
+    <string name="home_stat_years_value">5+</string>
+    <string name="home_stat_years_label">лет на рынке</string>
+    <string name="home_stat_cars_label">авто в парке</string>
+    <string name="home_stat_support_value">24/7</string>
+    <string name="home_stat_support_label">поддержка</string>
+    <string name="home_about">Мы работаем с 2020 года и собрали большой автопарк: от эконом класса до премиальных кроссоверов и электрокаров. Бронируйте авто за пару минут и платите только за время поездки.</string>
+    <string name="home_why_title">Почему выбирают нас</string>
+    <string name="home_adv_1">Почасовая аренда без скрытых платежей</string>
+    <string name="home_adv_2">Все автомобили застрахованы и проходят регулярное ТО</string>
+    <string name="home_adv_3">Автомобили с разным типом привода, топлива и КПП</string>
+    <string name="home_adv_4">Быстрое оформление без визита в офис</string>
+
     <string name="fuel_petrol">Бензин</string>
     <string name="fuel_diesel">Дизель</string>
     <string name="fuel_electro">Электро</string>
