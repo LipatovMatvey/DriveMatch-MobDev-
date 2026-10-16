@@ -16,6 +16,7 @@
 
     <string name="spec_power">Power</string>
     <string name="spec_engine_volume">Engine volume</string>
+    <string name="spec_transmission_type">Transmission</string>
     <string name="spec_drive">Drive type</string>
     <string name="spec_fuel">Fuel type</string>
     <string name="spec_color">Color</string>
@@ -26,4 +27,14 @@
     <string name="price_per_hour">%1$d ₽ / hour</string>
 
     <string name="car_photo_description">Photo %1$d of %2$d</string>
+    <string name="transmission_mt">MT</string>
+    <string name="transmission_at">AT</string>
+
+    <string name="favs_label">Favourites</string>
+    <string name="home_label">Home</string>
+    <string name="cars_label">Cars</string>
+
+    <string name="car_title_with_year">%1$s %2$s (%3$d)</string>
+    <string name="rent_car">Book</string>
+    <string name="add_to_favourite">Favourites</string>
 </resources>

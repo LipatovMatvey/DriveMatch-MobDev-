@@ -1,64 +1,69 @@
 package com.example.drivematch
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.seconds
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.drivematch.ui.theme.AppTheme
+import androidx.compose.foundation.lazy.items
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
-//fun ComponentActivity.notifyState(stateName: String) {
-//    Toast.makeText(
-//        this, "Переход в состояние: $stateName",
-//        Toast.LENGTH_SHORT
-//    ).show()
-//}
+enum class Destination(
+    val route: String,
+    @StringRes val label: Int,
+    val icon: ImageVector
+) {
+    HOME("home", R.string.home_label, Icons.Filled.Home),
+    CARS("cars", R.string.cars_label, Icons.AutoMirrored.Filled.List),
+    FAVOURITES("favourites", R.string.favs_label, Icons.Filled.Favorite)
+}
+
+const val nameOrganization = "DriveMatch"
+const val ROUTE_CAR_ARG = "carId"
+const val ROUTE_CAR = "car/{$ROUTE_CAR_ARG}"
+fun carRoute(id: Int) = "car/$id"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //notifyState("onCreate() (Activity создана)")
         enableEdgeToEdge()
         setContent {
             AppTheme {
@@ -66,52 +71,19 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
 
-//    override fun onStart() {
-//        super.onStart()
-//        notifyState("onStart (Activity стала видимой)")
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        notifyState("onResume() (Activity активна)")
-//    }
-//
-//    override fun onPause() {
-//        notifyState("onPause() (Activity приостановлена)")
-//        super.onPause()
-//    }
-//
-//    override fun onStop() {
-//        notifyState("onStop() (Activity невидима)")
-//        super.onStop()
-//    }
-//
-//    override fun onRestart() {
-//        super.onRestart()
-//        notifyState("onRestart() (Activity перезапущена)")
-//    }
-//
-//    override fun onDestroy() {
-//        notifyState("onDestroy() (Activity уничтожена)")
-//        super.onDestroy()
-//    }
+// переход на раздел без накопления стека
+fun NavHostController.navigateToTab(destination: Destination) {
+    navigate(destination.route) {
+        popUpTo(graph.findStartDestination().id) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
+    }
 }
 
 @Composable
 fun CarsharingContainer() {
-    val context = LocalContext.current.applicationContext
-    /// NOTE: Заворачиваем лямбду в remember, чтобы не пересоздавать при
-    /// каждой рекомпозиции, только при изменении контекста, который захватывается лямбдой
-    val notifyEffect = remember(context) {
-        return@remember { text: String ->
-            Toast.makeText(context, "Compose -> $text", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    val isLicenseConfirmed = rememberSaveable { mutableStateOf(false) }
-    val secondsPassed = rememberSaveable { mutableIntStateOf(0) }
-    val displayName = if (isLicenseConfirmed.value) "Крутой гость" else "Гость"
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val notImplementedMessage = stringResource(R.string.notice_not_implemented)
@@ -120,166 +92,134 @@ fun CarsharingContainer() {
             scope.showNotImplemented(snackbarHostState, notImplementedMessage)
         }
     }
-    val isCarOpen = rememberSaveable { mutableStateOf(false) }
 
-    BackHandler(enabled = isCarOpen.value) {
-        isCarOpen.value = false
-    }
+    val navController = rememberNavController()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+    val selectedRoute = if (currentRoute == ROUTE_CAR) Destination.CARS.route else currentRoute
 
     CompositionLocalProvider(LocalPlaceholderNotifier provides placeholderNotifier) {
+
         Scaffold(
+            bottomBar = {
+                AppNavigationBar(
+                    currentRoute = selectedRoute,
+                    onDestinationClick = { navController.navigateToTab(it) }
+                )
+            },
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { innerPadding ->
-            if (isCarOpen.value) {
-                CarDetailsScreen(
-                    car = sampleCar,
-                    modifier = Modifier.padding(innerPadding)
-                )
-            } else {
-                CarsharingScreen(
-                    modifier = Modifier.padding(innerPadding),
-                    nameOrganizations = "DriveMatch",
-                    nameDirectors = "Кузнецов Н.\nЛипатов М.",
-                    greetingText = "Привет, ${displayName}!",
-                    seconds = secondsPassed.value,
-                    isLicenseConfirmed = isLicenseConfirmed.value,
-                    onLicenseToggle = { isLicenseConfirmed.value = it },
-                    onChooseCarClick = { isCarOpen.value = true }
-                )
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(1.seconds)
-            secondsPassed.value ++
-        }
-    }
-
-    DisposableEffect(Unit) {
-        notifyEffect("Экран каршеринга создан")
-        onDispose {
-            notifyEffect("Экран каршеринга уничтожается")
+            AppNavHost(
+                navController = navController,
+                startDestination = Destination.HOME,
+                modifier = Modifier.padding(innerPadding)
+            )
         }
     }
 }
 
 @Composable
-fun CarsharingScreen(
-    modifier: Modifier = Modifier,
-    nameOrganizations: String,
-    nameDirectors: String,
-    greetingText: String,
-    seconds: Int,
-    isLicenseConfirmed: Boolean,
-    onLicenseToggle: (Boolean) -> Unit,
-    onChooseCarClick: () -> Unit
+fun AppNavigationBar(
+    currentRoute: String?,
+    onDestinationClick: (Destination) -> Unit
 ) {
-    val notifier = MaterialTheme.snackbar
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        )
-        {
-            Text(
-                text = nameOrganizations,
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.align(Alignment.TopCenter)
+    NavigationBar {
+        Destination.entries.forEach { destination ->
+            NavigationBarItem(
+                selected = currentRoute == destination.route,
+                onClick = { onDestinationClick(destination) },
+                icon = { Icon(destination.icon, contentDescription = null) },
+                label = { Text(stringResource(destination.label)) }
             )
+        }
+    }
+}
 
-            Text(
-                text = nameDirectors,
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 80.dp),
-                textAlign = TextAlign.End
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Spacer(modifier = Modifier.height(50.dp))
-
-                Text(
-                    text = greetingText,
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = "Таймер: $seconds сек.",
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = if (isLicenseConfirmed) "Водительское удостоверение\nподтверждено" else "У вас есть права?")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Switch(
-                        checked = isLicenseConfirmed,
-                        onCheckedChange = onLicenseToggle
-                    )
+@Composable
+fun AppNavHost(
+    navController: NavHostController,
+    startDestination: Destination,
+    modifier: Modifier = Modifier,
+) {
+    NavHost(
+        navController = navController,
+        startDestination = startDestination.route,
+        modifier = modifier
+    ) {
+        Destination.entries.forEach { destination ->
+            composable(destination.route) {
+                when (destination) {
+                    Destination.HOME -> CarsharingScreen(nameOrganizations = nameOrganization)
+                    Destination.CARS -> CarListScreen(
+                        cars = carsData,
+                        onCarClick = { car -> navController.navigate(carRoute(car.id)) }
+                    )   // временно, позже список
+                    Destination.FAVOURITES ->  FavouritesScreen()
                 }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = if (isLicenseConfirmed) "Счастливого пути!" else "Забронируйте автомобиль",
-                )
-
-                Spacer(modifier = Modifier.height(45.dp))
-
-                Button(
-                    enabled = isLicenseConfirmed,
-                    onClick = onChooseCarClick
-                ) {
-                    Text("Выбрать автомобиль")
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-//                OutlinedButton(onClick = notifier::notifyPlaceholder) {
-//                    Text("Поделиться")
-//                } 
+            }
+        }
+        composable(
+            route = ROUTE_CAR,
+            arguments = listOf(navArgument(ROUTE_CAR_ARG) { type = NavType.IntType })
+        ) { entry ->
+            val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
+            carsData.firstOrNull { it.id == id }?.let { car ->
+                CarDetailsScreen(car = car)
             }
         }
     }
+}
 
-@Preview(
-    showBackground = true,
-    name = "Каршеринг — не забронирован",
-    widthDp = 360,
-    heightDp = 640
-)
+
+
 @Composable
-fun CarsharingScreenPreview() {
-    AppTheme {
-        CompositionLocalProvider(
-            LocalPlaceholderNotifier provides PlaceholderNotifier { }
+fun CarsharingScreen(
+    modifier: Modifier = Modifier,
+    nameOrganizations: String
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = nameOrganizations,
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Surface(color = MaterialTheme.colorScheme.background) {
-                CarsharingScreen(
-                    nameOrganizations = "DriveMatch",
-                    nameDirectors = "Кузнецов Н.\nЛипатов М.",
-                    greetingText = "Привет, гость!",
-                    seconds = 42,
-                    isLicenseConfirmed = false,
-                    onLicenseToggle = { _ -> },
-                    onChooseCarClick = { }
-                )
-            }
+            // содержимое главного экрана добавим позже
         }
+    }
+}
+
+/**
+ *
+ */
+@Composable
+fun FavouritesScreen(modifier: Modifier = Modifier) {
+    val notifier = MaterialTheme.snackbar
+
+    notifier.notifyPlaceholder()
+
+    Text(
+        text = "Данный раздел находится в разработке",
+        modifier = modifier.padding(16.dp)
+    )
+}
+
+@Preview(showBackground = true, name = "Всё приложение", widthDp = 360, heightDp = 640)
+@Composable
+fun CarsharingContainerPreview() {
+    AppTheme {
+        CarsharingContainer()
     }
 }
