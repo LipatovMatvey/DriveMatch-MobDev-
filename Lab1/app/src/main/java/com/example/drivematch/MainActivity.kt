@@ -43,17 +43,18 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.drivematch.ui.theme.AppTheme
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 enum class Destination(
     val route: String,
     @StringRes val label: Int,
-    val icon: ImageVector
+    val icon: @Composable () -> ImageVector
 ) {
-    HOME("home", R.string.home_label, Icons.Filled.Home),
-    CARS("cars", R.string.cars_label, Icons.AutoMirrored.Filled.List),
-    FAVOURITES("favourites", R.string.favs_label, Icons.Filled.Favorite)
+    HOME("home", R.string.home_label, { Icons.Filled.Home }),
+    CARS("cars", R.string.cars_label, { ImageVector.vectorResource(id = R.drawable.iconcar) }),
+    FAVOURITES("favourites", R.string.favs_label, { Icons.Filled.Favorite} )
 }
 
 const val nameOrganization = "DriveMatch"
@@ -128,7 +129,7 @@ fun AppNavigationBar(
             NavigationBarItem(
                 selected = currentRoute == destination.route,
                 onClick = { onDestinationClick(destination) },
-                icon = { Icon(destination.icon, contentDescription = null) },
+                icon = { Icon(destination.icon(), contentDescription = null) },
                 label = { Text(stringResource(destination.label)) }
             )
         }
