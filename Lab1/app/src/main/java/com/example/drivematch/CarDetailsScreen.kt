@@ -64,7 +64,7 @@ fun CarDetailsScreen(
             )
             OutlinedButton(onClick = notifier::notifyPlaceholder) {
                 Text(
-                    text = "❤\uFE0F",
+                    text = "Нравится❤\uFE0F",
                     style = MaterialTheme.typography.titleMedium
                 )
             }

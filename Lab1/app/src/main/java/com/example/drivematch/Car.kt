@@ -21,16 +21,63 @@ enum class TransmissionType(@StringRes val labelRes: Int) {
 }
 
 data class Car(
+    /**
+     * Идентификатор автомобиля
+     */
     val id: Int,
+
+    /**
+     * Марка
+     */
     val brand: String,
+
+    /**
+     * Модель
+     */
     val model: String,
+
+    /**
+     * Цена аренды
+     */
     val pricePerHour: Int,
+
+    /**
+     * Фотографии авто
+     */
     val photos: List<Int>,
+
+    /**
+     * Мощность
+     */
     val horsepower: Int,
+
+    /**
+     * Объем двигателя
+     */
     val engineVolume: Double,
+
+    /**
+     * Тип привода
+     */
     val driveType: DriveType,
+
+    /**
+     * Тип топлива
+     */
     val fuelType: FuelType,
+
+    /**
+     * Тип КПП
+     */
     val transmissionType: TransmissionType,
+
+    /**
+     * Цвет
+     */
     @StringRes val colorRes: Int,
+
+    /**
+     * Год выпуска
+     */
     val year: Int
 )
