@@ -23,12 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity2"
-            android:exported="false"
-            android:theme="@style/Theme.Laba1"
-            android:label="ChoosingCar"
-            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

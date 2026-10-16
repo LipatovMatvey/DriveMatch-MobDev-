@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -159,7 +160,7 @@ fun CarsharingContainer() {
     }
 
     DisposableEffect(Unit) {
-        notifyEffect("Экран каршеринга создан")
+        //notifyEffect("Экран каршеринга создан")
         onDispose {
             notifyEffect("Экран каршеринга уничтожается")
         }
@@ -177,6 +178,7 @@ fun CarsharingScreen(
     onLicenseToggle: (Boolean) -> Unit,
     onChooseCarClick: () -> Unit
 ) {
+
     val notifier = MaterialTheme.snackbar
         Box(
             modifier = modifier
@@ -251,12 +253,13 @@ fun CarsharingScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-//                OutlinedButton(onClick = notifier::notifyPlaceholder) {
-//                    Text("Поделиться")
-//                } 
+                OutlinedButton(onClick = notifier::notifyPlaceholder) {
+                    Text("Поделиться")
+                }
             }
         }
     }
+
 
 @Preview(
     showBackground = true,
