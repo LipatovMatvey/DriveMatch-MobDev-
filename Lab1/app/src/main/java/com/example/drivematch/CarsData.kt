@@ -56,6 +56,56 @@ val carsData = listOf(
         colorRes = R.string.color_gray,
         year = 2023
     ),
+    Car (
+        id = 3,
+        brand = "BMW",
+        model = "3 Series",
+        pricePerHour = 850,
+        photos = listOf(
+            R.drawable.bmw_3_series_1,
+            R.drawable.bmw_3_series_2,
+            R.drawable.bmw_3_series_3,
+            R.drawable.bmw_3_series_4,
+            R.drawable.bmw_3_series_5,
+            R.drawable.bmw_3_series_6,
+            R.drawable.bmw_3_series_7,
+            R.drawable.bmw_3_series_8,
+            R.drawable.bmw_3_series_9,
+            R.drawable.bmw_3_series_10,
+        ),
+        horsepower = 190,
+        engineVolume = 2.0,
+        driveType = DriveType.REAR,
+        fuelType = FuelType.DIESEL,
+        transmissionType = TransmissionType.MT,
+        colorRes = R.string.color_blue,
+        year = 2020
+    ),
+    Car (
+        id = 4,
+        brand = "Tesla",
+        model = "Roadster",
+        pricePerHour = 2500,
+        photos = listOf(
+            R.drawable.tesla_roadster_1,
+            R.drawable.tesla_roadster_2,
+            R.drawable.tesla_roadster_3,
+            R.drawable.tesla_roadster_4,
+            R.drawable.tesla_roadster_5,
+            R.drawable.tesla_roadster_6,
+            R.drawable.tesla_roadster_7,
+            R.drawable.tesla_roadster_8,
+            R.drawable.tesla_roadster_9,
+            R.drawable.tesla_roadster_10,
+        ),
+        horsepower = 1200,
+        engineVolume = 0.0,
+        driveType = DriveType.ALL,
+        fuelType = FuelType.ELECTRO,
+        transmissionType = TransmissionType.AT,
+        colorRes = R.string.color_gray,
+        year = 2028
+    )
 )
 val sampleCar1 = carsData.first()
 val sampleCar2 = carsData[1]

@@ -8,6 +8,7 @@
 
     <string name="fuel_petrol">Бензин</string>
     <string name="fuel_diesel">Дизель</string>
+    <string name="fuel_electro">Электро</string>
 
     <string name="color_white">Белый</string>
     <string name="color_black">Чёрный</string>

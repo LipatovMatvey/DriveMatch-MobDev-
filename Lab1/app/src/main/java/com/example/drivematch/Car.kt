@@ -11,7 +11,8 @@ enum class DriveType(@StringRes val labelRes: Int) {
 
 enum class FuelType(@StringRes val labelRes: Int) {
     PETROL(R.string.fuel_petrol),
-    DIESEL(R.string.fuel_diesel)
+    DIESEL(R.string.fuel_diesel),
+    ELECTRO(R.string.fuel_electro),
 }
 
 enum class TransmissionType(@StringRes val labelRes: Int) {

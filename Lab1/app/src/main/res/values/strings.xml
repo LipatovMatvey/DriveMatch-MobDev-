@@ -7,6 +7,7 @@
 
     <string name="fuel_petrol">Petrol</string>
     <string name="fuel_diesel">Diesel</string>
+    <string name="fuel_electro">Electro</string>
 
     <string name="color_white">White</string>
     <string name="color_black">Black</string>
