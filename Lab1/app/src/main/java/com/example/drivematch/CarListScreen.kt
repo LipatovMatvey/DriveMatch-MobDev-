@@ -13,9 +13,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,19 +31,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.ui.theme.AppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarListScreen(
     cars: List<Car>,
     onCarClick: (Car) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(cars, key = { it.id }) { car ->
-            CarRow(car = car, onCarClick = { onCarClick(car) } )
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.cars_in_stock),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
+            )
+        }
+    ){ innerPadding ->
+        LazyColumn(
+            modifier = modifier.fillMaxSize().padding(innerPadding),
+            contentPadding = PaddingValues(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(cars, key = { it.id }) { car ->
+                CarRow(car = car, onCarClick = { onCarClick(car) } )
+            }
         }
     }
 }
@@ -70,7 +89,7 @@ fun CarRow(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(width = 96.dp, height = 64.dp)
+                    .size(width = 100.dp, height = 70.dp)
                     .clip(MaterialTheme.shapes.medium)
             )
         }
