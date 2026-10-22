@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Laba1">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true"
             android:label="DriveMatch"
             android:theme="@style/Theme.Laba1"

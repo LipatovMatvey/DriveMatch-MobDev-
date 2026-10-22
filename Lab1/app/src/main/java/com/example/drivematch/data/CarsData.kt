@@ -1,5 +1,6 @@
-package com.example.drivematch
+package com.example.drivematch.data
 
+import com.example.drivematch.R
 import com.example.drivematch.model.Car
 import com.example.drivematch.model.DriveType
 import com.example.drivematch.model.FuelType

@@ -1,4 +1,4 @@
-package com.example.drivematch
+package com.example.drivematch.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -59,7 +59,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.drivematch.LocalPlaceholderNotifier
+import com.example.drivematch.PlaceholderNotifier
+import com.example.drivematch.R
+import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
+import com.example.drivematch.showNotImplemented
 import com.example.drivematch.ui.theme.AppTheme
 
 enum class Destination(

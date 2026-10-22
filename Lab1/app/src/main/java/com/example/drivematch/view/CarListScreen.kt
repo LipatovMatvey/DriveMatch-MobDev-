@@ -1,4 +1,4 @@
-package com.example.drivematch
+package com.example.drivematch.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +28,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.drivematch.R
+import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
 
@@ -52,7 +54,7 @@ fun CarListScreen(
         }
     ){ innerPadding ->
         LazyColumn(
-            modifier = modifier.fillMaxSize().padding(innerPadding),
+            modifier.fillMaxSize().padding(innerPadding),
             contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {

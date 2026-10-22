@@ -1,4 +1,4 @@
-package com.example.drivematch
+package com.example.drivematch.view
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -31,7 +31,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.drivematch.R
+import com.example.drivematch.data.sampleCar1
+import com.example.drivematch.data.sampleCar2
 import com.example.drivematch.model.Car
+import com.example.drivematch.snackbar
 import com.example.drivematch.ui.theme.AppTheme
 
 
