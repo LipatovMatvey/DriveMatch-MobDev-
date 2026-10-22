@@ -1,5 +1,10 @@
 package com.example.drivematch
 
+import com.example.drivematch.model.Car
+import com.example.drivematch.model.DriveType
+import com.example.drivematch.model.FuelType
+import com.example.drivematch.model.TransmissionType
+
 val carsData = listOf(
     Car(
         id = 1,
@@ -56,7 +61,7 @@ val carsData = listOf(
         colorRes = R.string.color_gray,
         year = 2023
     ),
-    Car (
+    Car(
         id = 3,
         brand = "BMW",
         model = "3 Series",
@@ -81,7 +86,7 @@ val carsData = listOf(
         colorRes = R.string.color_blue,
         year = 2020
     ),
-    Car (
+    Car(
         id = 4,
         brand = "Tesla",
         model = "Roadster",
