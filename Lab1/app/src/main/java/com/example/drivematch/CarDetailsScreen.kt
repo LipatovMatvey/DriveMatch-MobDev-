@@ -31,17 +31,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.drivematch.snackbar
+import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
 
 
 @Composable
 fun CarDetailsScreen(
     car: Car,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isFavourite: Boolean = false,
+    onToggleFavourite: () -> Unit = {}
 ) {
     val notifier = MaterialTheme.snackbar
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -49,9 +50,7 @@ fun CarDetailsScreen(
             .padding(16.dp)
     ) {
         CarPhotoCarousel(photos = car.photos)
-
         Spacer(modifier = Modifier.height(16.dp))
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -62,16 +61,23 @@ fun CarDetailsScreen(
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.weight(1f)
             )
-            OutlinedButton(onClick = notifier::notifyPlaceholder) {
-                Text(
-                    text = "Нравится❤\uFE0F",
-                    style = MaterialTheme.typography.titleMedium
-                )
+            if (isFavourite) {
+                Button(onClick = onToggleFavourite) {
+                    Text(
+                        text = stringResource(R.string.fav_remove),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            } else {
+                OutlinedButton(onClick = onToggleFavourite) {
+                    Text(
+                        text = stringResource(R.string.fav_add),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
         }
-
         Spacer(modifier = Modifier.height(8.dp))
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -90,9 +96,7 @@ fun CarDetailsScreen(
                 )
             }
         }
-
         Spacer(modifier = Modifier.height(24.dp))
-
         OutlinedCard(modifier = Modifier.fillMaxWidth()) {
             SpecRow(R.string.spec_power, stringResource(R.string.value_hp, car.horsepower))
             HorizontalDivider()
@@ -118,7 +122,6 @@ fun CarPhotoCarousel(
     modifier: Modifier = Modifier
 ) {
     val carouselState = rememberCarouselState { photos.size }
-
     HorizontalMultiBrowseCarousel(
         state = carouselState,
         preferredItemWidth = 260.dp,
@@ -141,7 +144,7 @@ fun CarPhotoCarousel(
 }
 
 @Composable
-private fun SpecRow(@StringRes labelRes: Int, value: String) {
+fun SpecRow(@StringRes labelRes: Int, value: String) {
     ListItem(
         headlineContent = { Text(stringResource(labelRes)) },
         trailingContent = {
@@ -150,7 +153,7 @@ private fun SpecRow(@StringRes labelRes: Int, value: String) {
     )
 }
 
-@Preview(showBackground = true, name = "Автомобиль RU", widthDp = 360, heightDp = 640, locale = "ru")
+@Preview(showBackground = true, name = "Автомобиль RU", widthDp = 360, heightDp = 750, locale = "ru")
 @Composable
 fun CarDetailsScreenPreviewRu() {
     AppTheme {
@@ -160,7 +163,7 @@ fun CarDetailsScreenPreviewRu() {
     }
 }
 
-@Preview(showBackground = true, name = "Автомобиль EN", widthDp = 360, heightDp = 640, locale = "en")
+@Preview(showBackground = true, name = "Автомобиль EN", widthDp = 360, heightDp = 750, locale = "en")
 @Composable
 fun CarDetailsScreenPreviewEn() {
     AppTheme {
