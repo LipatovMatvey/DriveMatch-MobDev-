@@ -1,4 +1,4 @@
-package com.example.drivematch
+package com.example.drivematch.model
 
 import androidx.annotation.StringRes
 import com.example.drivematch.R
