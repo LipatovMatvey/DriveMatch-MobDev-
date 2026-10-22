@@ -45,8 +45,14 @@
     <string name="transmission_at">AT</string>
 
     <string name="favs_label">Favourites</string>
-    <string name="home_label">Home</string>
+    <string name="home_label">About</string>
     <string name="cars_label">Cars</string>
+
+    <string name="cars_in_stock">Cars in stock</string>
+
+    <string name="favs_empty">You haven’t added anything to your favorites yet</string>
+    <string name="fav_add">like ❤️</string>
+    <string name="fav_remove">In favorites ❤️</string>
 
     <string name="car_title_with_year">%1$s %2$s (%3$d)</string>
     <string name="rent_car">Book</string>

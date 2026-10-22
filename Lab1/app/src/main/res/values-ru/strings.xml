@@ -46,8 +46,14 @@
     <string name="transmission_at">АКПП</string>
 
     <string name="favs_label">Избранное</string>
-    <string name="home_label">Главная</string>
+    <string name="home_label">Информация</string>
     <string name="cars_label">Автомобили</string>
+
+    <string name="cars_in_stock">Автомобили в наличии</string>
+
+    <string name="favs_empty">Вы пока ничего не добавили в избранное</string>
+    <string name="fav_add">Нравится ❤️</string>
+    <string name="fav_remove">В избранном ❤️</string>
 
     <string name="car_title_with_year">%1$s %2$s (%3$d)</string>
     <string name="rent_car">Арендовать</string>
