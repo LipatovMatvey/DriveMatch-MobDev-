@@ -20,6 +20,7 @@ class CarsViewModel : ViewModel() {
     val cars: List<Car> = repository.getCars()
 
     var favouriteIds by mutableStateOf(setOf<Int>())
+        private set
 
     private val _events = Channel<CarsEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()

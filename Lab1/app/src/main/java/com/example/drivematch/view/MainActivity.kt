@@ -6,17 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -24,7 +20,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -35,7 +30,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -61,8 +55,8 @@ import com.example.drivematch.R
 import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
-import com.example.drivematch.viewmodel.CarsViewModel
 import com.example.drivematch.viewmodel.CarsEvent
+import com.example.drivematch.viewmodel.CarsViewModel
 
 enum class Destination(
     val route: String,
@@ -178,7 +172,7 @@ fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.ABOUT -> CarsharingScreen(
+                    Destination.ABOUT -> CarsharingAboutScreen(
                         nameOrganizations = NAME_ORGANIZATION,
                         carsCount = cars.size
                     )
@@ -206,153 +200,6 @@ fun AppNavHost(
                     onToggleFavourite = { onToggleFavourite(car.id) },
                     onRentClick = onRentClick
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun CarsharingScreen(
-    modifier: Modifier = Modifier,
-    nameOrganizations: String,
-    carsCount: Int
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = nameOrganizations,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.home_tagline),
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height(24.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            StatCard(
-                value = stringResource(R.string.home_stat_years_value),
-                label = stringResource(R.string.home_stat_years_label),
-                modifier = Modifier.weight(1f)
-            )
-            StatCard(
-                value = carsCount.toString(),
-                label = stringResource(R.string.home_stat_cars_label),
-                modifier = Modifier.weight(1f)
-            )
-            StatCard(
-                value = stringResource(R.string.home_stat_support_value),
-                label = stringResource(R.string.home_stat_support_label),
-
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Spacer(Modifier.height(24.dp))
-        Text(
-            text = stringResource(R.string.home_about),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(Modifier.height(24.dp))
-        Text(
-            text = stringResource(R.string.home_why_title),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.align(Alignment.Start)
-        )
-        listOf(
-            R.string.home_adv_1,
-            R.string.home_adv_2,
-            R.string.home_adv_3,
-            R.string.home_adv_4
-        ).forEach { res ->
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        Icons.Filled.Check,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                },
-                headlineContent = { Text(stringResource(res)) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun StatCard(value: String, label: String, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 15.dp, horizontal = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun FavouritesScreen(
-    cars: List<Car>,
-    onCarClick: (Car) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.favs_label),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                }
-            )
-        }
-    ) { innerPadding ->
-        if (cars.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.favs_empty),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(cars, key = { it.id }) { car ->
-                    CarRow(car = car, onCarClick = { onCarClick(car) })
-                }
             }
         }
     }
