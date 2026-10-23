@@ -35,7 +35,6 @@ import com.example.drivematch.R
 import com.example.drivematch.data.sampleCar1
 import com.example.drivematch.data.sampleCar2
 import com.example.drivematch.model.Car
-import com.example.drivematch.snackbar
 import com.example.drivematch.ui.theme.AppTheme
 
 
@@ -44,9 +43,9 @@ fun CarDetailsScreen(
     car: Car,
     modifier: Modifier = Modifier,
     isFavourite: Boolean = false,
-    onToggleFavourite: () -> Unit = {}
+    onToggleFavourite: () -> Unit = {},
+    onRentClick: () -> Unit = {}
 ) {
-    val notifier = MaterialTheme.snackbar
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -93,7 +92,7 @@ fun CarDetailsScreen(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.weight(1f)
             )
-            Button(onClick = notifier::notifyPlaceholder) {
+            Button(onClick = onRentClick) {
                 Text(
                     text = stringResource(R.string.rent_car),
                     style = MaterialTheme.typography.titleMedium
@@ -106,7 +105,7 @@ fun CarDetailsScreen(
             HorizontalDivider()
             SpecRow(R.string.spec_engine_volume, stringResource(R.string.value_volume, car.engineVolume))
             HorizontalDivider()
-            SpecRow(R.string.spec_transmission_type, stringResource(car.transmissionType.labelRes, car.transmissionType))
+            SpecRow(R.string.spec_transmission_type, stringResource(car.transmissionType.labelRes))
             HorizontalDivider()
             SpecRow(R.string.spec_drive, stringResource(car.driveType.labelRes))
             HorizontalDivider()

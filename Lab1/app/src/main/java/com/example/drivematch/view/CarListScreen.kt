@@ -54,7 +54,7 @@ fun CarListScreen(
         }
     ){ innerPadding ->
         LazyColumn(
-            modifier.fillMaxSize().padding(innerPadding),
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
             contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {

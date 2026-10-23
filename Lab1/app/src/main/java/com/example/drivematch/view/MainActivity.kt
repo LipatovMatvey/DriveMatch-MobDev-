@@ -31,18 +31,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -51,6 +48,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -59,13 +57,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.drivematch.LocalPlaceholderNotifier
-import com.example.drivematch.PlaceholderNotifier
 import com.example.drivematch.R
 import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
-import com.example.drivematch.showNotImplemented
 import com.example.drivematch.ui.theme.AppTheme
+import com.example.drivematch.viewmodel.CarsViewModel
+import com.example.drivematch.viewmodel.CarsEvent
 
 enum class Destination(
     val route: String,
@@ -74,7 +71,7 @@ enum class Destination(
 ) {
     ABOUT("about", R.string.home_label, { Icons.Filled.Info }),
     CARS("cars", R.string.cars_label, { ImageVector.vectorResource(id = R.drawable.iconcar) }),
-    FAVOURITES("favourites", R.string.favs_label, { Icons.Filled.Favorite} )
+    FAVOURITES("favourites", R.string.favs_label, { Icons.Filled.Favorite })
 }
 
 const val NAME_ORGANIZATION = "DriveMatch"
@@ -103,41 +100,46 @@ fun NavHostController.navigateToTab(destination: Destination) {
 }
 
 @Composable
-fun CarsharingContainer() {
+fun CarsharingContainer(viewModel: CarsViewModel = viewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val notImplementedMessage = stringResource(R.string.notice_not_implemented)
-    val placeholderNotifier = remember(notImplementedMessage, snackbarHostState) {
-        PlaceholderNotifier {
-            scope.showNotImplemented(snackbarHostState, notImplementedMessage)
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                CarsEvent.NotImplemented -> {
+                    snackbarHostState.currentSnackbarData?.dismiss()
+                    snackbarHostState.showSnackbar(
+                        message = notImplementedMessage,
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
         }
     }
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val selectedRoute = if (currentRoute == ROUTE_CAR) Destination.CARS.route else currentRoute
-    var favouriteIds by rememberSaveable { mutableStateOf(setOf<Int>()) }
-    val onToggleFavourite: (Int) -> Unit = { id ->
-        favouriteIds = if (id in favouriteIds) favouriteIds - id else favouriteIds + id
-    }
-    CompositionLocalProvider(LocalPlaceholderNotifier provides placeholderNotifier) {
-        Scaffold(
-            bottomBar = {
-                AppNavigationBar(
-                    currentRoute = selectedRoute,
-                    onDestinationClick = { navController.navigateToTab(it) }
-                )
-            },
-            snackbarHost = { SnackbarHost(snackbarHostState) }
-        ) { innerPadding ->
-            AppNavHost(
-                navController = navController,
-                startDestination = Destination.CARS,
-                favouriteIds = favouriteIds,
-                onToggleFavourite = onToggleFavourite,
-                modifier = Modifier.padding(innerPadding)
+
+    Scaffold(
+        bottomBar = {
+            AppNavigationBar(
+                currentRoute = selectedRoute,
+                onDestinationClick = { navController.navigateToTab(it) }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { innerPadding ->
+        AppNavHost(
+            navController = navController,
+            startDestination = Destination.CARS,
+            cars = viewModel.cars,
+            favouriteIds = viewModel.favouriteIds,
+            onToggleFavourite = viewModel::onToggleFavourite,
+            onRentClick = viewModel::onRentClick,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }
 
@@ -162,8 +164,10 @@ fun AppNavigationBar(
 fun AppNavHost(
     navController: NavHostController,
     startDestination: Destination,
+    cars: List<Car>,
     favouriteIds: Set<Int>,
     onToggleFavourite: (Int) -> Unit,
+    onRentClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -174,13 +178,17 @@ fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.ABOUT -> CarsharingScreen(nameOrganizations = NAME_ORGANIZATION)
+                    Destination.ABOUT -> CarsharingScreen(
+                        nameOrganizations = NAME_ORGANIZATION,
+                        carsCount = cars.size
+                    )
                     Destination.CARS -> CarListScreen(
-                        cars = carsData,
+                        cars = cars,
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
-                    Destination.FAVOURITES ->  FavouritesScreen(
-                        cars = carsData.filter { it.id in favouriteIds },
+
+                    Destination.FAVOURITES -> FavouritesScreen(
+                        cars = cars.filter { it.id in favouriteIds },
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
                 }
@@ -191,11 +199,12 @@ fun AppNavHost(
             arguments = listOf(navArgument(ROUTE_CAR_ARG) { type = NavType.IntType })
         ) { entry ->
             val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
-            carsData.firstOrNull { it.id == id }?.let { car ->
+            cars.firstOrNull { it.id == id }?.let { car ->
                 CarDetailsScreen(
                     car = car,
                     isFavourite = car.id in favouriteIds,
-                    onToggleFavourite = { onToggleFavourite(car.id) }
+                    onToggleFavourite = { onToggleFavourite(car.id) },
+                    onRentClick = onRentClick
                 )
             }
         }
@@ -205,7 +214,8 @@ fun AppNavHost(
 @Composable
 fun CarsharingScreen(
     modifier: Modifier = Modifier,
-    nameOrganizations: String
+    nameOrganizations: String,
+    carsCount: Int
 ) {
     Column(
         modifier = modifier
@@ -233,7 +243,7 @@ fun CarsharingScreen(
                 modifier = Modifier.weight(1f)
             )
             StatCard(
-                value = carsData.size.toString(),
+                value = carsCount.toString(),
                 label = stringResource(R.string.home_stat_cars_label),
                 modifier = Modifier.weight(1f)
             )
@@ -320,7 +330,10 @@ fun FavouritesScreen(
     ) { innerPadding ->
         if (cars.isEmpty()) {
             Box(
-                modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -331,7 +344,9 @@ fun FavouritesScreen(
             }
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
                 contentPadding = PaddingValues(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -340,14 +355,6 @@ fun FavouritesScreen(
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true, name = "Всё приложение", widthDp = 360, heightDp = 750, locale = "ru")
-@Composable
-fun CarsharingContainerPreview() {
-    AppTheme {
-        CarsharingContainer()
     }
 }
 
