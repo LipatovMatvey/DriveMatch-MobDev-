@@ -16,14 +16,18 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
+import com.example.drivematch.data.sampleCar2
+import com.example.drivematch.ui.theme.AppTheme
 
 @Composable
 fun CarsharingAboutScreen(
@@ -117,6 +121,32 @@ private fun StatCard(value: String, label: String, modifier: Modifier = Modifier
                 text = label,
                 style = MaterialTheme.typography.labelMedium,
                 textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Автомобиль EN", widthDp = 360, heightDp = 750, locale = "en")
+@Composable
+fun CarsharingAboutScreenPreviewEn() {
+    AppTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            CarsharingAboutScreen(
+                nameOrganizations = NAME_ORGANIZATION,
+                carsCount = 256
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Автомобиль EN", widthDp = 360, heightDp = 750, locale = "ru")
+@Composable
+fun CarsharingAboutScreenPreviewRu() {
+    AppTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            CarsharingAboutScreen(
+                nameOrganizations = NAME_ORGANIZATION,
+                carsCount = 256
             )
         }
     }

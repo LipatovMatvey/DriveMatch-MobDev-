@@ -63,7 +63,6 @@ fun CarsharingContainer(viewModel: CarsViewModel = viewModel()) {
                             duration = SnackbarDuration.Short
                         )
                     }
-
                 }
             }
         }
@@ -90,14 +89,5 @@ fun CarsharingContainer(viewModel: CarsViewModel = viewModel()) {
             onRentClick = viewModel::onRentClick,
             modifier = Modifier.padding(innerPadding)
         )
-    }
-}
-
-
-@Preview(showBackground = true, name = "Избранное", widthDp = 360, heightDp = 750, locale = "en")
-@Composable
-fun FavouritesScreenPreview() {
-    AppTheme {
-        FavouritesScreen(cars = carsData.take(3), onCarClick = {})
     }
 }

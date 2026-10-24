@@ -100,7 +100,17 @@ fun CarRow(
 
 @Preview(showBackground = true, name = "Вкладка Автомобили RU", widthDp = 360, heightDp = 640, locale = "ru")
 @Composable
-fun CarListScreenPreview() {
+fun CarListScreenPreviewRu() {
+    AppTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            CarListScreen(cars = carsData, onCarClick = {} )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Вкладка Автомобили RU", widthDp = 360, heightDp = 640, locale = "en")
+@Composable
+fun CarListScreenPreviewEn() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             CarListScreen(cars = carsData, onCarClick = {} )

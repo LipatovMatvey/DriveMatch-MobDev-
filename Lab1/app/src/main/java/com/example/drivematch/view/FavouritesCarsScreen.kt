@@ -17,9 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
+import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
+import com.example.drivematch.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,5 +71,21 @@ fun FavouritesScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Избранное", widthDp = 360, heightDp = 750, locale = "ru")
+@Composable
+fun FavouritesScreenPreviewRu() {
+    AppTheme {
+        FavouritesScreen(cars = carsData.take(3), onCarClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "Избранное", widthDp = 360, heightDp = 750, locale = "en")
+@Composable
+fun FavouritesScreenPreviewEn() {
+    AppTheme {
+        FavouritesScreen(cars = carsData.take(3), onCarClick = {})
     }
 }
