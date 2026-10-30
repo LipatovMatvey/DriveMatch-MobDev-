@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -26,10 +26,11 @@ import com.example.drivematch.component.AppNavigationBar
 import com.example.drivematch.component.Destination
 import com.example.drivematch.component.ROUTE_CAR
 import com.example.drivematch.component.navigateToTab
-import com.example.drivematch.data.carsData
+import com.example.drivematch.data.InMemoryCarRepository
 import com.example.drivematch.ui.theme.AppTheme
 import com.example.drivematch.viewmodel.CarsEvent
 import com.example.drivematch.viewmodel.CarsViewModel
+import com.example.drivematch.viewmodel.CarsViewModelFactory
 import kotlinx.coroutines.launch
 
 const val NAME_ORGANIZATION = "DriveMatch"
@@ -47,16 +48,20 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CarsharingContainer(viewModel: CarsViewModel = viewModel()) {
+fun CarsharingContainer(
+    viewModel: CarsViewModel = viewModel(
+        factory = CarsViewModelFactory(InMemoryCarRepository)
+    )
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     val notImplementedMessage = stringResource(R.string.notice_not_implemented)
-    val score = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 CarsEvent.NotImplemented -> {
                     snackbarHostState.currentSnackbarData?.dismiss()
-                    score.launch {
+                    scope.launch {
                         snackbarHostState.showSnackbar(
                             message = notImplementedMessage,
                             withDismissAction = true,
@@ -70,12 +75,23 @@ fun CarsharingContainer(viewModel: CarsViewModel = viewModel()) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val selectedRoute = if (currentRoute == ROUTE_CAR) Destination.CARS.route else currentRoute
+    val selectedRoute = if (currentRoute == ROUTE_CAR) {
+        navController.previousBackStackEntry?.destination?.route
+    } else {
+        currentRoute
+    }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         bottomBar = {
             AppNavigationBar(
                 currentRoute = selectedRoute,
-                onDestinationClick = { navController.navigateToTab(it) }
+                onDestinationClick = { destination ->
+                    if (destination.route == selectedRoute) {
+                        navController.popBackStack(destination.route, inclusive = false)
+                    } else {
+                        navController.navigateToTab(destination)
+                    }
+                }
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -83,8 +99,7 @@ fun CarsharingContainer(viewModel: CarsViewModel = viewModel()) {
         AppNavHost(
             navController = navController,
             startDestination = Destination.CARS,
-            cars = viewModel.cars,
-            favouriteIds = viewModel.favouriteIds,
+            uiState = uiState,
             onToggleFavourite = viewModel::onToggleFavourite,
             onRentClick = viewModel::onRentClick,
             modifier = Modifier.padding(innerPadding)

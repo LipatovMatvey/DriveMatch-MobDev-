@@ -19,13 +19,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.drivematch.R
-import com.example.drivematch.model.Car
 import com.example.drivematch.view.CarDetailsScreen
 import com.example.drivematch.view.CarListScreen
 import com.example.drivematch.view.CarsharingAboutScreen
 import com.example.drivematch.view.FavouritesScreen
-import com.example.drivematch.view.NAME_ORGANIZATION
 import androidx.compose.ui.Modifier
+import com.example.drivematch.viewmodel.CarsUiState
 
 enum class Destination(
     val route: String,
@@ -71,8 +70,7 @@ fun AppNavigationBar(
 fun AppNavHost(
     navController: NavHostController,
     startDestination: Destination,
-    cars: List<Car>,
-    favouriteIds: Set<Int>,
+    uiState: CarsUiState,
     onToggleFavourite: (Int) -> Unit,
     onRentClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -86,16 +84,16 @@ fun AppNavHost(
             composable(destination.route) {
                 when (destination) {
                     Destination.ABOUT -> CarsharingAboutScreen(
-                        nameOrganizations = NAME_ORGANIZATION,
-                        carsCount = cars.size
+                        nameOrganizations = "DriveMatch",
+                        carsCount = uiState.cars.size
                     )
                     Destination.CARS -> CarListScreen(
-                        cars = cars,
+                        cars = uiState.cars,
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
 
                     Destination.FAVOURITES -> FavouritesScreen(
-                        cars = cars.filter { it.id in favouriteIds },
+                        cars = uiState.favouriteCars,
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
                 }
@@ -106,10 +104,10 @@ fun AppNavHost(
             arguments = listOf(navArgument(ROUTE_CAR_ARG) { type = NavType.IntType })
         ) { entry ->
             val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
-            cars.firstOrNull { it.id == id }?.let { car ->
+            uiState.carById(id)?.let { car ->
                 CarDetailsScreen(
                     car = car,
-                    isFavourite = car.id in favouriteIds,
+                    isFavourite = car.id in uiState.favouriteIds,
                     onToggleFavourite = { onToggleFavourite(car.id) },
                     onRentClick = onRentClick
                 )
