@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -24,6 +25,7 @@ import com.example.drivematch.view.CarListScreen
 import com.example.drivematch.view.CarsharingAboutScreen
 import com.example.drivematch.view.FavouritesScreen
 import androidx.compose.ui.Modifier
+import com.example.drivematch.view.ProfileScreen
 import com.example.drivematch.viewmodel.CarsUiState
 
 enum class Destination(
@@ -33,9 +35,12 @@ enum class Destination(
 ) {
     ABOUT("about", R.string.home_label, { Icons.Filled.Info }),
     CARS("cars", R.string.cars_label, { ImageVector.vectorResource(id = R.drawable.iconcar) }),
-    FAVOURITES("favourites", R.string.favs_label, { Icons.Filled.Favorite })
+    FAVOURITES("favourites", R.string.favs_label, { Icons.Filled.Favorite }),
+
+    PROFILE("profile", R.string.profile_label, { Icons.Filled.Person })
 }
 
+const val NAME_ORGANIZATION = "DriveMatch"
 
 const val ROUTE_CAR_ARG = "carId"
 const val ROUTE_CAR = "car/{$ROUTE_CAR_ARG}"
@@ -84,18 +89,18 @@ fun AppNavHost(
             composable(destination.route) {
                 when (destination) {
                     Destination.ABOUT -> CarsharingAboutScreen(
-                        nameOrganizations = "DriveMatch",
+                        nameOrganizations = NAME_ORGANIZATION,
                         carsCount = uiState.cars.size
                     )
                     Destination.CARS -> CarListScreen(
                         cars = uiState.cars,
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
-
                     Destination.FAVOURITES -> FavouritesScreen(
                         cars = uiState.favouriteCars,
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
+                    Destination.PROFILE -> ProfileScreen(onEditClick = onRentClick)
                 }
             }
         }

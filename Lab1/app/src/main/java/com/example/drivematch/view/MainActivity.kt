@@ -33,7 +33,6 @@ import com.example.drivematch.viewmodel.CarsViewModel
 import com.example.drivematch.viewmodel.CarsViewModelFactory
 import kotlinx.coroutines.launch
 
-const val NAME_ORGANIZATION = "DriveMatch"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
