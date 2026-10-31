@@ -57,4 +57,21 @@
     <string name="car_title_with_year">%1$s %2$s (%3$d)</string>
     <string name="rent_car">Book</string>
     <string name="add_to_favourite">Favourites</string>
+
+    <string name="profile_label">Profile</string>
+    <string name="profile_photo_description">Profile photo</string>
+    <string name="profile_edit">Edit</string>
+
+    <string name="profile_full_name">Ivan I. Ivanov</string>
+
+    <string name="profile_birth_date">Date of birth</string>
+    <string name="profile_birth_date_value">15.03.1995</string>
+    <string name="profile_city">City</string>
+    <string name="profile_city_value">Moscow</string>
+    <string name="profile_license_category">License categories</string>
+    <string name="profile_license_category_value">B, B1</string>
+    <string name="profile_license_number">License number</string>
+    <string name="profile_license_number_value">99 12 345678</string>
+    <string name="profile_license_valid_until">License valid until</string>
+    <string name="profile_license_valid_until_value">20.06.2032</string>
 </resources>

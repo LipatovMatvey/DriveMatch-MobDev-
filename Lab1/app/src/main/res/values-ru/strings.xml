@@ -58,4 +58,22 @@
     <string name="car_title_with_year">%1$s %2$s (%3$d)</string>
     <string name="rent_car">Арендовать</string>
     <string name="add_to_favourite">Избранное</string>
+
+    <string name="profile_label">Профиль</string>
+    <string name="profile_photo_description">Фото профиля</string>
+    <string name="profile_edit">Редактировать</string>
+
+    <string name="profile_full_name">Иванов Иван Иванович</string>
+
+    <string name="profile_birth_date">Дата рождения</string>
+    <string name="profile_birth_date_value">15.03.1995</string>
+    <string name="profile_city">Город</string>
+    <string name="profile_city_value">Москва</string>
+    <string name="profile_license_category">Категории прав</string>
+    <string name="profile_license_category_value">B, B1</string>
+    <string name="profile_license_number">Номер ВУ</string>
+    <string name="profile_license_number_value">99 12 345678</string>
+    <string name="profile_license_valid_until">ВУ действует до</string>
+    <string name="profile_license_valid_until_value">20.06.2032</string>
+
 </resources>
