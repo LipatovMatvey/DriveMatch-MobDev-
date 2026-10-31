@@ -1,6 +1,5 @@
 package com.example.drivematch.view
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
@@ -32,9 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
+import com.example.drivematch.component.SpecRow
 import com.example.drivematch.data.sampleCar1
 import com.example.drivematch.data.sampleCar2
 import com.example.drivematch.model.Car
+import com.example.drivematch.component.CarPhotoCarousel
 import com.example.drivematch.ui.theme.AppTheme
 
 
@@ -103,7 +103,10 @@ fun CarDetailsScreen(
         OutlinedCard(modifier = Modifier.fillMaxWidth()) {
             SpecRow(R.string.spec_power, stringResource(R.string.value_hp, car.horsepower))
             HorizontalDivider()
-            SpecRow(R.string.spec_engine_volume, stringResource(R.string.value_volume, car.engineVolume))
+            SpecRow(
+                R.string.spec_engine_volume,
+                stringResource(R.string.value_volume, car.engineVolume)
+            )
             HorizontalDivider()
             SpecRow(R.string.spec_transmission_type, stringResource(car.transmissionType.labelRes))
             HorizontalDivider()
@@ -118,45 +121,14 @@ fun CarDetailsScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CarPhotoCarousel(
-    photos: List<Int>,
-    modifier: Modifier = Modifier
-) {
-    val carouselState = rememberCarouselState { photos.size }
-    HorizontalMultiBrowseCarousel(
-        state = carouselState,
-        preferredItemWidth = 260.dp,
-        itemSpacing = 8.dp,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(200.dp)
-    ) { index ->
-        Image(
-            painter = painterResource(photos[index]),
-            contentDescription = stringResource(
-                R.string.car_photo_description, index + 1, photos.size
-            ),
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .height(200.dp)
-                .maskClip(MaterialTheme.shapes.extraLarge)
-        )
-    }
-}
 
-@Composable
-fun SpecRow(@StringRes labelRes: Int, value: String) {
-    ListItem(
-        headlineContent = { Text(stringResource(labelRes)) },
-        trailingContent = {
-            Text(text = value, style = MaterialTheme.typography.titleMedium)
-        }
-    )
-}
-
-@Preview(showBackground = true, name = "Автомобиль RU", widthDp = 360, heightDp = 750, locale = "ru")
+@Preview(
+    showBackground = true,
+    name = "Автомобиль RU",
+    widthDp = 360,
+    heightDp = 750,
+    locale = "ru"
+)
 @Composable
 fun CarDetailsScreenPreviewRu() {
     AppTheme {
@@ -166,7 +138,13 @@ fun CarDetailsScreenPreviewRu() {
     }
 }
 
-@Preview(showBackground = true, name = "Автомобиль EN", widthDp = 360, heightDp = 750, locale = "en")
+@Preview(
+    showBackground = true,
+    name = "Автомобиль EN",
+    widthDp = 360,
+    heightDp = 750,
+    locale = "en"
+)
 @Composable
 fun CarDetailsScreenPreviewEn() {
     AppTheme {

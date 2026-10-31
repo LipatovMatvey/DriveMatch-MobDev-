@@ -108,7 +108,7 @@ fun CarListScreenPreviewRu() {
     }
 }
 
-@Preview(showBackground = true, name = "Вкладка Автомобили RU", widthDp = 360, heightDp = 640, locale = "en")
+@Preview(showBackground = true, name = "Вкладка Автомобили EN", widthDp = 360, heightDp = 640, locale = "en")
 @Composable
 fun CarListScreenPreviewEn() {
     AppTheme {
