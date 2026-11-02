@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
-import com.example.drivematch.data.sampleCar2
+import com.example.drivematch.component.NAME_ORGANIZATION
 import com.example.drivematch.ui.theme.AppTheme
 
 @Composable
@@ -126,7 +126,13 @@ private fun StatCard(value: String, label: String, modifier: Modifier = Modifier
     }
 }
 
-@Preview(showBackground = true, name = "Автомобиль EN", widthDp = 360, heightDp = 750, locale = "en")
+@Preview(
+    showBackground = true,
+    name = "Автомобиль EN",
+    widthDp = 360,
+    heightDp = 750,
+    locale = "en"
+)
 @Composable
 fun CarsharingAboutScreenPreviewEn() {
     AppTheme {
@@ -139,7 +145,13 @@ fun CarsharingAboutScreenPreviewEn() {
     }
 }
 
-@Preview(showBackground = true, name = "Автомобиль EN", widthDp = 360, heightDp = 750, locale = "ru")
+@Preview(
+    showBackground = true,
+    name = "Автомобиль EN",
+    widthDp = 360,
+    heightDp = 750,
+    locale = "ru"
+)
 @Composable
 fun CarsharingAboutScreenPreviewRu() {
     AppTheme {

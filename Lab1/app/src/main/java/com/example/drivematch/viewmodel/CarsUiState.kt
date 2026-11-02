@@ -1,7 +1,9 @@
 package com.example.drivematch.viewmodel
 
+import androidx.compose.runtime.Stable
 import com.example.drivematch.model.Car
 
+@Stable
 data class CarsUiState(
     val cars: List<Car> = emptyList(),
     val favouriteIds: Set<Int> = emptySet()

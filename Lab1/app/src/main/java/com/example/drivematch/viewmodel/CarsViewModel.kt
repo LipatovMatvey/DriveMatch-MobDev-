@@ -2,7 +2,6 @@ package com.example.drivematch.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.drivematch.data.CarRepository
-import com.example.drivematch.model.Car
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +14,7 @@ sealed interface CarsEvent {
 }
 
 class CarsViewModel(
-    private val repository: CarRepository
+    repository: CarRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CarsUiState(cars = repository.getCars()))
@@ -38,5 +37,4 @@ class CarsViewModel(
     fun onRentClick() {
         _events.trySend(CarsEvent.NotImplemented)
     }
-
 }
