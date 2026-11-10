@@ -2,10 +2,10 @@ package com.example.drivematch.data
 
 import com.example.drivematch.model.User
 
-interface ProfileRepository {
+interface UserRepository {
     fun getProfile(): User
 }
 
-object InMemoryProfileRepository : ProfileRepository {
+object InMemoryUserRepository : UserRepository {
     override fun getProfile(): User = sampleUser1
 }

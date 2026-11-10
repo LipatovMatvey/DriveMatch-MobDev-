@@ -27,7 +27,7 @@ import com.example.drivematch.component.Destination
 import com.example.drivematch.component.ROUTE_CAR
 import com.example.drivematch.component.navigateToTab
 import com.example.drivematch.data.InMemoryCarRepository
-import com.example.drivematch.data.InMemoryProfileRepository
+import com.example.drivematch.data.InMemoryUserRepository
 import com.example.drivematch.ui.theme.AppTheme
 import com.example.drivematch.viewmodel.CarsEvent
 import com.example.drivematch.viewmodel.CarsViewModel
@@ -55,7 +55,7 @@ fun CarsharingContainer(
         factory = CarsViewModelFactory(InMemoryCarRepository)
     ),
     profileViewModel: ProfileViewModel = viewModel(
-        factory = ProfileViewModelFactory(InMemoryProfileRepository)
+        factory = ProfileViewModelFactory(InMemoryUserRepository)
     )
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
