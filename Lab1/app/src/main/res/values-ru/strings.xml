@@ -72,4 +72,11 @@
     <string name="cars_empty">Нет доступных автомобилей</string>
     <string name="car_not_found">Автомобиль не найден</string>
 
+    <string name="rent_hours">Количество часов</string>
+    <string name="rent_hours_decrease">Уменьшить количество часов</string>
+    <string name="rent_hours_increase">Увеличить количество часов</string>
+    <string name="rent_total">Итого: %1$d ₽</string>
+    <string name="rent_confirm">Подтвердить аренду</string>
+    <string name="rent_created">Аренда оформлена</string>
+
 </resources>

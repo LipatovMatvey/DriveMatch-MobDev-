@@ -71,4 +71,11 @@
     <string name="cars_empty">No cars available</string>
     <string name="car_not_found">Car not found</string>
 
+    <string name="rent_hours">Number of hours</string>
+    <string name="rent_hours_decrease">Decrease hours</string>
+    <string name="rent_hours_increase">Increase hours</string>
+    <string name="rent_total">Total: %1$d ₽</string>
+    <string name="rent_confirm">Confirm rental</string>
+    <string name="rent_created">Rental confirmed</string>
+
 </resources>
