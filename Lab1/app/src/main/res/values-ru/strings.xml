@@ -76,4 +76,7 @@
     <string name="profile_license_valid_until">ВУ действует до</string>
     <string name="profile_license_valid_until_value">20.06.2032</string>
 
+    <string name="cars_empty">Нет доступных автомобилей</string>
+    <string name="car_not_found">Автомобиль не найден</string>
+
 </resources>
