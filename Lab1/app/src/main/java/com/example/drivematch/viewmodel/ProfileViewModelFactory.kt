@@ -2,10 +2,10 @@ package com.example.drivematch.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.drivematch.data.ProfileRepository
+import com.example.drivematch.data.UserRepository
 
 class ProfileViewModelFactory(
-    private val repository: ProfileRepository
+    private val repository: UserRepository
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
