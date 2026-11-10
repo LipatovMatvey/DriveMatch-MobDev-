@@ -26,6 +26,7 @@ import com.example.drivematch.view.CarsharingAboutScreen
 import com.example.drivematch.view.FavouritesScreen
 import androidx.compose.ui.Modifier
 import com.example.drivematch.view.ProfileScreen
+import com.example.drivematch.view.RentScreen
 import com.example.drivematch.viewmodel.CarsUiState
 import com.example.drivematch.viewmodel.ProfileUiState
 
@@ -45,6 +46,8 @@ const val NAME_ORGANIZATION = "DriveMatch"
 const val ROUTE_CAR_ARG = "carId"
 const val ROUTE_CAR = "car/{$ROUTE_CAR_ARG}"
 fun carRoute(id: Int) = "car/$id"
+const val ROUTE_RENT = "rent/{$ROUTE_CAR_ARG}"
+fun rentRoute(id: Int) = "rent/$id"
 
 fun NavHostController.navigateToTab(destination: Destination) {
     navigate(destination.route) {
@@ -78,7 +81,8 @@ fun AppNavHost(
     uiState: CarsUiState,
     profileUiState: ProfileUiState,
     onToggleFavourite: (Int) -> Unit,
-    onRentClick: () -> Unit,
+    onConfirmRent: (carId: Int, hours: Int) -> Unit,
+    onEditProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -93,17 +97,20 @@ fun AppNavHost(
                         nameOrganizations = NAME_ORGANIZATION,
                         carsCount = uiState.cars.size
                     )
+
                     Destination.CARS -> CarListScreen(
                         cars = uiState.cars,
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
+
                     Destination.FAVOURITES -> FavouritesScreen(
                         cars = uiState.favouriteCars,
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
+
                     Destination.PROFILE -> ProfileScreen(
                         profile = profileUiState.profile,
-                        onEditClick = onRentClick
+                        onEditClick = onEditProfileClick
                     )
                 }
             }
@@ -119,7 +126,22 @@ fun AppNavHost(
                     car = car,
                     isFavourite = car.id in uiState.favouriteIds,
                     onToggleFavourite = { onToggleFavourite(car.id) },
-                    onRentClick = onRentClick
+                    onRentClick = { navController.navigate(rentRoute(car.id)) }
+                )
+            } else {
+                CenteredMessage(text = stringResource(R.string.car_not_found))
+            }
+        }
+        composable(
+            route = ROUTE_RENT,
+            arguments = listOf(navArgument(ROUTE_CAR_ARG) { type = NavType.IntType })
+        ) { entry ->
+            val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
+            val car = uiState.carById(id)
+            if (car != null) {
+                RentScreen(
+                    car = car,
+                    onConfirm = { hours -> onConfirmRent(car.id, hours) }
                 )
             } else {
                 CenteredMessage(text = stringResource(R.string.car_not_found))
