@@ -109,13 +109,16 @@ fun AppNavHost(
             arguments = listOf(navArgument(ROUTE_CAR_ARG) { type = NavType.IntType })
         ) { entry ->
             val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
-            uiState.carById(id)?.let { car ->
+            val car = uiState.carById(id)
+            if (car != null) {
                 CarDetailsScreen(
                     car = car,
                     isFavourite = car.id in uiState.favouriteIds,
                     onToggleFavourite = { onToggleFavourite(car.id) },
                     onRentClick = onRentClick
                 )
+            } else {
+                CenteredMessage(text = stringResource(R.string.car_not_found))
             }
         }
     }
