@@ -80,4 +80,9 @@ data class Car(
      * Год выпуска
      */
     val year: Int
-)
+) {
+    /**
+     * Расчет цены
+     */
+    fun priceFor(hours: Int): Int = pricePerHour * hours
+}
