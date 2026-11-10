@@ -34,7 +34,7 @@ class CarsViewModel(
         }
     }
 
-    fun onRentClick() {
+    fun onNotImplementedClick() {
         _events.trySend(CarsEvent.NotImplemented)
     }
 }
