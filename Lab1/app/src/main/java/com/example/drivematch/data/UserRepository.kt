@@ -3,9 +3,13 @@ package com.example.drivematch.data
 import com.example.drivematch.model.User
 
 interface UserRepository {
-    fun getProfile(): User
+
+    /**
+     * Получение пользователя
+     */
+    fun getUser(): User
 }
 
 object InMemoryUserRepository : UserRepository {
-    override fun getProfile(): User = sampleUser1
+    override fun getUser(): User = sampleUser1
 }

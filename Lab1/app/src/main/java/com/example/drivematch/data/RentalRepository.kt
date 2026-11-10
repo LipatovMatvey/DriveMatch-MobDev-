@@ -3,7 +3,15 @@ package com.example.drivematch.data
 import com.example.drivematch.model.Rental
 
 interface RentalRepository {
+
+    /**
+     * Получение списка всех арендованных автомобилей
+     */
     fun getRentals(): List<Rental>
+
+    /**
+     * Создание аренды
+     */
     fun createRental(carId: Int, hours: Int): Rental
 }
 
