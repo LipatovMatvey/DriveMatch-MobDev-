@@ -7,5 +7,5 @@ interface ProfileRepository {
 }
 
 object InMemoryProfileRepository : ProfileRepository {
-    override fun getProfile(): User = sampleProfile
+    override fun getProfile(): User = sampleUser1
 }

@@ -2,7 +2,7 @@ package com.example.drivematch.data
 
 import com.example.drivematch.model.User
 
-val sampleProfile = User(
+val sampleUser1 = User(
     id = 1,
     fullName = "Иванов Иван Иванович",
     birthDate = "15.03.1995",
