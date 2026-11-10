@@ -10,6 +10,6 @@ class ProfileViewModel(
     repository: UserRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ProfileUiState(profile = repository.getProfile()))
+    private val _uiState = MutableStateFlow(ProfileUiState(profile = repository.getUser()))
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 }
