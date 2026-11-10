@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
+import com.example.drivematch.component.CenteredMessage
 import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
@@ -47,19 +48,10 @@ fun FavouritesScreen(
         }
     ) { innerPadding ->
         if (cars.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.favs_empty),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center
-                )
-            }
+            CenteredMessage(
+                text = stringResource(R.string.favs_empty),
+                modifier = Modifier.padding(innerPadding)
+            )
         } else {
             LazyColumn(
                 modifier = Modifier

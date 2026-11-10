@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
+import com.example.drivematch.component.CenteredMessage
 import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
@@ -54,14 +55,23 @@ fun CarListScreen(
                 windowInsets = WindowInsets(0, 0, 0, 0)
             )
         }
-    ){ innerPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(cars, key = { it.id }) { car ->
-                CarRow(car = car, onCarClick = { onCarClick(car) } )
+    ) { innerPadding ->
+        if (cars.isEmpty()) {
+            CenteredMessage(
+                text = stringResource(R.string.cars_empty),
+                modifier = Modifier.padding(innerPadding)
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(cars, key = { it.id }) { car ->
+                    CarRow(car = car, onCarClick = { onCarClick(car) })
+                }
             }
         }
     }
@@ -100,22 +110,66 @@ fun CarRow(
     }
 }
 
-@Preview(showBackground = true, name = "Вкладка Автомобили RU", widthDp = 360, heightDp = 640, locale = "ru")
+@Preview(
+    showBackground = true,
+    name = "Вкладка Автомобили RU",
+    widthDp = 360,
+    heightDp = 640,
+    locale = "ru"
+)
 @Composable
 fun CarListScreenPreviewRu() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            CarListScreen(cars = carsData, onCarClick = {} )
+            CarListScreen(cars = carsData, onCarClick = {})
         }
     }
 }
 
-@Preview(showBackground = true, name = "Вкладка Автомобили EN", widthDp = 360, heightDp = 640, locale = "en")
+@Preview(
+    showBackground = true,
+    name = "Вкладка Автомобили EN",
+    widthDp = 360,
+    heightDp = 640,
+    locale = "en"
+)
 @Composable
 fun CarListScreenPreviewEn() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            CarListScreen(cars = carsData, onCarClick = {} )
+            CarListScreen(cars = carsData, onCarClick = {})
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    name = "Пустой список",
+    widthDp = 360,
+    heightDp = 640,
+    locale = "en"
+)
+@Composable
+fun CarListScreenEmptyPreviewEn() {
+    AppTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            CarListScreen(cars = emptyList(), onCarClick = {})
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    name = "Пустой список",
+    widthDp = 360,
+    heightDp = 640,
+    locale = "ru"
+)
+@Composable
+fun CarListScreenEmptyPreviewRu() {
+    AppTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            CarListScreen(cars = emptyList(), onCarClick = {})
         }
     }
 }
