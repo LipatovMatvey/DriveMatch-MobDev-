@@ -34,11 +34,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
 import com.example.drivematch.component.SpecRow
+import com.example.drivematch.data.sampleUser1
+import com.example.drivematch.model.User
 import com.example.drivematch.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    profile: User,
     onEditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -78,21 +81,21 @@ fun ProfileScreen(
             }
             Spacer(Modifier.height(16.dp))
             Text(
-                text = stringResource(R.string.profile_full_name),
+                text = profile.fullName,
                 style = MaterialTheme.typography.headlineSmall,
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.height(24.dp))
             OutlinedCard(modifier = Modifier.fillMaxWidth()) {
-                SpecRow(R.string.profile_birth_date, stringResource(R.string.profile_birth_date_value))
+                SpecRow(R.string.profile_birth_date, profile.birthDate)
                 HorizontalDivider()
-                SpecRow(R.string.profile_city, stringResource(R.string.profile_city_value))
+                SpecRow(R.string.profile_city, profile.city)
                 HorizontalDivider()
-                SpecRow(R.string.profile_license_category, stringResource(R.string.profile_license_category_value))
+                SpecRow(R.string.profile_license_category, profile.licenseCategory)
                 HorizontalDivider()
-                SpecRow(R.string.profile_license_number, stringResource(R.string.profile_license_number_value))
+                SpecRow(R.string.profile_license_number, profile.licenseNumber)
                 HorizontalDivider()
-                SpecRow(R.string.profile_license_valid_until, stringResource(R.string.profile_license_valid_until_value))
+                SpecRow(R.string.profile_license_valid_until, profile.licenseValidUntil)
             }
             Spacer(Modifier.height(24.dp))
             Button(
@@ -113,11 +116,11 @@ fun ProfileScreen(
 @Preview(showBackground = true, name = "Профиль RU", widthDp = 360, heightDp = 750, locale = "ru")
 @Composable
 fun ProfileScreenPreviewRu() {
-    AppTheme { ProfileScreen(onEditClick = {}) }
+    AppTheme { ProfileScreen(profile = sampleUser1, onEditClick = {}) }
 }
 
 @Preview(showBackground = true, name = "Профиль EN", widthDp = 360, heightDp = 750, locale = "en")
 @Composable
 fun ProfileScreenPreviewEn() {
-    AppTheme { ProfileScreen(onEditClick = {}) }
+    AppTheme { ProfileScreen(profile = sampleUser1, onEditClick = {}) }
 }
