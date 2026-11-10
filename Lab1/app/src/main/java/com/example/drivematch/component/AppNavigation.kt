@@ -27,6 +27,7 @@ import com.example.drivematch.view.FavouritesScreen
 import androidx.compose.ui.Modifier
 import com.example.drivematch.view.ProfileScreen
 import com.example.drivematch.viewmodel.CarsUiState
+import com.example.drivematch.viewmodel.ProfileUiState
 
 enum class Destination(
     val route: String,
@@ -41,7 +42,6 @@ enum class Destination(
 }
 
 const val NAME_ORGANIZATION = "DriveMatch"
-
 const val ROUTE_CAR_ARG = "carId"
 const val ROUTE_CAR = "car/{$ROUTE_CAR_ARG}"
 fun carRoute(id: Int) = "car/$id"
@@ -76,6 +76,7 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: Destination,
     uiState: CarsUiState,
+    profileUiState: ProfileUiState,
     onToggleFavourite: (Int) -> Unit,
     onRentClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -100,7 +101,10 @@ fun AppNavHost(
                         cars = uiState.favouriteCars,
                         onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                     )
-                    Destination.PROFILE -> ProfileScreen(onEditClick = onRentClick)
+                    Destination.PROFILE -> ProfileScreen(
+                        profile = profileUiState.profile,
+                        onEditClick = onRentClick
+                    )
                 }
             }
         }

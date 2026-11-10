@@ -27,10 +27,13 @@ import com.example.drivematch.component.Destination
 import com.example.drivematch.component.ROUTE_CAR
 import com.example.drivematch.component.navigateToTab
 import com.example.drivematch.data.InMemoryCarRepository
+import com.example.drivematch.data.InMemoryProfileRepository
 import com.example.drivematch.ui.theme.AppTheme
 import com.example.drivematch.viewmodel.CarsEvent
 import com.example.drivematch.viewmodel.CarsViewModel
 import com.example.drivematch.viewmodel.CarsViewModelFactory
+import com.example.drivematch.viewmodel.ProfileViewModel
+import com.example.drivematch.viewmodel.ProfileViewModelFactory
 import kotlinx.coroutines.launch
 
 
@@ -50,6 +53,9 @@ class MainActivity : ComponentActivity() {
 fun CarsharingContainer(
     viewModel: CarsViewModel = viewModel(
         factory = CarsViewModelFactory(InMemoryCarRepository)
+    ),
+    profileViewModel: ProfileViewModel = viewModel(
+        factory = ProfileViewModelFactory(InMemoryProfileRepository)
     )
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -80,6 +86,7 @@ fun CarsharingContainer(
         currentRoute
     }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val profileUiState by profileViewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         bottomBar = {
             AppNavigationBar(
@@ -99,6 +106,7 @@ fun CarsharingContainer(
             navController = navController,
             startDestination = Destination.CARS,
             uiState = uiState,
+            profileUiState = profileUiState,
             onToggleFavourite = viewModel::onToggleFavourite,
             onRentClick = viewModel::onRentClick,
             modifier = Modifier.padding(innerPadding)
