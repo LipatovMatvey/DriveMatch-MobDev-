@@ -78,4 +78,8 @@
     <string name="rent_confirm">Confirm rental</string>
     <string name="rent_created">Rental confirmed</string>
 
+    <string name="profile_rentals_title">My rentals</string>
+    <string name="profile_rentals_empty">No rentals yet</string>
+    <string name="rental_hours_value">%1$d h</string>
+    <string name="rental_price_value">%1$d ₽</string>
 </resources>

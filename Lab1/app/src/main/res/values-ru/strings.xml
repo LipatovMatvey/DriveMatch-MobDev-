@@ -79,4 +79,8 @@
     <string name="rent_confirm">Подтвердить аренду</string>
     <string name="rent_created">Аренда оформлена</string>
 
+    <string name="profile_rentals_title">Мои аренды</string>
+    <string name="profile_rentals_empty">Аренд пока нет</string>
+    <string name="rental_hours_value">%1$d ч</string>
+    <string name="rental_price_value">%1$d ₽</string>
 </resources>
