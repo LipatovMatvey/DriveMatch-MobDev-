@@ -1,24 +1,12 @@
 package com.example.drivematch.model
 
-import androidx.annotation.StringRes
-import com.example.drivematch.R
+enum class DriveType { FRONT, REAR, ALL }
 
-enum class DriveType(@StringRes val labelRes: Int) {
-    FRONT(R.string.drive_front),
-    REAR(R.string.drive_rear),
-    ALL(R.string.drive_all)
-}
+enum class FuelType { PETROL, DIESEL, ELECTRO }
 
-enum class FuelType(@StringRes val labelRes: Int) {
-    PETROL(R.string.fuel_petrol),
-    DIESEL(R.string.fuel_diesel),
-    ELECTRO(R.string.fuel_electro),
-}
+enum class TransmissionType { MT, AT }
 
-enum class TransmissionType(@StringRes val labelRes: Int) {
-    MT(R.string.transmission_mt),
-    AT(R.string.transmission_at)
-}
+enum class CarColor { BLUE, GRAY }
 
 data class Car(
     /**
@@ -44,7 +32,7 @@ data class Car(
     /**
      * Фотографии авто
      */
-    val photos: List<Int>,
+    val photos: List<String>,
 
     /**
      * Мощность
@@ -74,7 +62,7 @@ data class Car(
     /**
      * Цвет
      */
-    @StringRes val colorRes: Int,
+    val color: CarColor,
 
     /**
      * Год выпуска
