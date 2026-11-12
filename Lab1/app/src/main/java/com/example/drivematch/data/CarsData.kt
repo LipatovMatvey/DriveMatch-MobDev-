@@ -1,10 +1,17 @@
 package com.example.drivematch.data
 
+import androidx.annotation.DrawableRes
 import com.example.drivematch.R
 import com.example.drivematch.model.Car
+import com.example.drivematch.model.CarColor
 import com.example.drivematch.model.DriveType
 import com.example.drivematch.model.FuelType
 import com.example.drivematch.model.TransmissionType
+
+private const val DRAWABLE_BASE = "android.resource://com.example.drivematch/drawable/"
+
+private fun drawable(@DrawableRes resId: Int): String =
+    "android.resource://com.example.drivematch/drawable/$resId"
 
 val carsData = listOf(
     Car(
@@ -13,26 +20,26 @@ val carsData = listOf(
         model = "Octavia",
         pricePerHour = 350,
         photos = listOf(
-            R.drawable.skoda_octavia_1,
-            R.drawable.skoda_octavia_4,
-            R.drawable.skoda_octavia_5,
-            R.drawable.skoda_octavia_2,
-            R.drawable.skoda_octavia_6,
-            R.drawable.skoda_octavia_7,
-            R.drawable.skoda_octavia_3,
-            R.drawable.skoda_octavia_8,
-            R.drawable.skoda_octavia_10,
-            R.drawable.skoda_octavia_11,
-            R.drawable.skoda_octavia_12,
-            R.drawable.skoda_octavia_13,
-            R.drawable.skoda_octavia_14
+            drawable(R.drawable.skoda_octavia_1),
+            drawable(R.drawable.skoda_octavia_4),
+            drawable(R.drawable.skoda_octavia_5),
+            drawable(R.drawable.skoda_octavia_2),
+            drawable(R.drawable.skoda_octavia_6),
+            drawable(R.drawable.skoda_octavia_7),
+            drawable(R.drawable.skoda_octavia_3),
+            drawable(R.drawable.skoda_octavia_8),
+            drawable(R.drawable.skoda_octavia_10),
+            drawable(R.drawable.skoda_octavia_11),
+            drawable(R.drawable.skoda_octavia_12),
+            drawable(R.drawable.skoda_octavia_13),
+            drawable(R.drawable.skoda_octavia_14)
         ),
         horsepower = 150,
         engineVolume = 1.4,
         driveType = DriveType.FRONT,
         fuelType = FuelType.PETROL,
         transmissionType = TransmissionType.AT,
-        colorRes = R.string.color_blue,
+        color = CarColor.BLUE,
         year = 2021
     ),
     Car(
@@ -41,25 +48,25 @@ val carsData = listOf(
         model = "X5",
         pricePerHour = 1000,
         photos = listOf(
-            R.drawable.bmw_x5_1,
-            R.drawable.bmw_x5_2,
-            R.drawable.bmw_x5_3,
-            R.drawable.bmw_x5_4,
-            R.drawable.bmw_x5_5,
-            R.drawable.bmw_x5_6,
-            R.drawable.bmw_x5_7,
-            R.drawable.bmw_x5_8,
-            R.drawable.bmw_x5_9,
-            R.drawable.bmw_x5_10,
-            R.drawable.bmw_x5_11,
-            R.drawable.bmw_x5_12,
+            drawable(R.drawable.bmw_x5_1),
+            drawable(R.drawable.bmw_x5_2),
+            drawable(R.drawable.bmw_x5_3),
+            drawable(R.drawable.bmw_x5_4),
+            drawable(R.drawable.bmw_x5_5),
+            drawable(R.drawable.bmw_x5_6),
+            drawable(R.drawable.bmw_x5_7),
+            drawable(R.drawable.bmw_x5_8),
+            drawable(R.drawable.bmw_x5_9),
+            drawable(R.drawable.bmw_x5_10),
+            drawable(R.drawable.bmw_x5_12),
+            drawable(R.drawable.bmw_x5_12),
         ),
         horsepower = 313,
         engineVolume = 3.0,
         driveType = DriveType.ALL,
         fuelType = FuelType.PETROL,
         transmissionType = TransmissionType.AT,
-        colorRes = R.string.color_gray,
+        color = CarColor.GRAY,
         year = 2023
     ),
     Car(
@@ -68,23 +75,23 @@ val carsData = listOf(
         model = "3 Series",
         pricePerHour = 850,
         photos = listOf(
-            R.drawable.bmw_3_series_1,
-            R.drawable.bmw_3_series_2,
-            R.drawable.bmw_3_series_3,
-            R.drawable.bmw_3_series_4,
-            R.drawable.bmw_3_series_5,
-            R.drawable.bmw_3_series_6,
-            R.drawable.bmw_3_series_7,
-            R.drawable.bmw_3_series_8,
-            R.drawable.bmw_3_series_9,
-            R.drawable.bmw_3_series_10,
+            drawable(R.drawable.bmw_3_series_1),
+            drawable(R.drawable.bmw_3_series_2),
+            drawable(R.drawable.bmw_3_series_3),
+            drawable(R.drawable.bmw_3_series_4),
+            drawable(R.drawable.bmw_3_series_5),
+            drawable(R.drawable.bmw_3_series_6),
+            drawable(R.drawable.bmw_3_series_7),
+            drawable(R.drawable.bmw_3_series_8),
+            drawable(R.drawable.bmw_3_series_9),
+            drawable(R.drawable.bmw_3_series_10),
         ),
         horsepower = 190,
         engineVolume = 2.0,
         driveType = DriveType.REAR,
         fuelType = FuelType.DIESEL,
         transmissionType = TransmissionType.MT,
-        colorRes = R.string.color_blue,
+        color = CarColor.BLUE,
         year = 2020
     ),
     Car(
@@ -93,23 +100,23 @@ val carsData = listOf(
         model = "Roadster",
         pricePerHour = 2500,
         photos = listOf(
-            R.drawable.tesla_roadster_1,
-            R.drawable.tesla_roadster_2,
-            R.drawable.tesla_roadster_3,
-            R.drawable.tesla_roadster_4,
-            R.drawable.tesla_roadster_5,
-            R.drawable.tesla_roadster_6,
-            R.drawable.tesla_roadster_7,
-            R.drawable.tesla_roadster_8,
-            R.drawable.tesla_roadster_9,
-            R.drawable.tesla_roadster_10,
+            drawable(R.drawable.tesla_roadster_1),
+            drawable(R.drawable.tesla_roadster_2),
+            drawable(R.drawable.tesla_roadster_3),
+            drawable(R.drawable.tesla_roadster_4),
+            drawable(R.drawable.tesla_roadster_5),
+            drawable(R.drawable.tesla_roadster_6),
+            drawable(R.drawable.tesla_roadster_7),
+            drawable(R.drawable.tesla_roadster_8),
+            drawable(R.drawable.tesla_roadster_9),
+            drawable(R.drawable.tesla_roadster_10),
         ),
         horsepower = 1200,
         engineVolume = 0.0,
         driveType = DriveType.ALL,
         fuelType = FuelType.ELECTRO,
         transmissionType = TransmissionType.AT,
-        colorRes = R.string.color_gray,
+        color = CarColor.GRAY,
         year = 2028
     )
 )
