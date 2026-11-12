@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,6 +45,7 @@ fun RentScreen(
     modifier: Modifier = Modifier
 ) {
     var hours by rememberSaveable { mutableIntStateOf(MIN_HOURS) }
+    var submitted by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -101,7 +103,11 @@ fun RentScreen(
         )
         Spacer(Modifier.height(24.dp))
         Button(
-            onClick = { onConfirm(hours) },
+            onClick = {
+                submitted = true
+                onConfirm(hours)
+            },
+            enabled = !submitted,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
