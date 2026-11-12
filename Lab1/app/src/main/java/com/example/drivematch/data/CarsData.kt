@@ -8,8 +8,6 @@ import com.example.drivematch.model.DriveType
 import com.example.drivematch.model.FuelType
 import com.example.drivematch.model.TransmissionType
 
-private const val DRAWABLE_BASE = "android.resource://com.example.drivematch/drawable/"
-
 private fun drawable(@DrawableRes resId: Int): String =
     "android.resource://com.example.drivematch/drawable/$resId"
 
