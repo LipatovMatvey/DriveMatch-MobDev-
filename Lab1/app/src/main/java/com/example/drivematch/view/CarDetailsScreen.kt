@@ -46,8 +46,10 @@ fun CarDetailsScreen(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        CarPhotoCarousel(photos = car.photos)
-        Spacer(modifier = Modifier.height(16.dp))
+        if (car.photos.isNotEmpty()){
+            CarPhotoCarousel(photos = car.photos)
+            Spacer(modifier = Modifier.height(16.dp))
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -102,13 +104,13 @@ fun CarDetailsScreen(
                 stringResource(R.string.value_volume, car.engineVolume)
             )
             HorizontalDivider()
-            SpecRow(R.string.spec_transmission_type, stringResource(car.transmissionType.labelRes))
+            SpecRow(R.string.spec_transmission_type, stringResource(car.transmissionType.labelRes()))
             HorizontalDivider()
-            SpecRow(R.string.spec_drive, stringResource(car.driveType.labelRes))
+            SpecRow(R.string.spec_drive, stringResource(car.driveType.labelRes()))
             HorizontalDivider()
-            SpecRow(R.string.spec_fuel, stringResource(car.fuelType.labelRes))
+            SpecRow(R.string.spec_fuel, stringResource(car.fuelType.labelRes()))
             HorizontalDivider()
-            SpecRow(R.string.spec_color, stringResource(car.colorRes))
+            SpecRow(R.string.spec_color, stringResource(car.color.labelRes()))
             HorizontalDivider()
             SpecRow(R.string.spec_year, car.year.toString())
         }
