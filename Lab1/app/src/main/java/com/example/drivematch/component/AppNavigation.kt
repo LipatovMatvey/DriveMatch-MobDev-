@@ -29,6 +29,7 @@ import com.example.drivematch.view.ProfileScreen
 import com.example.drivematch.view.RentScreen
 import com.example.drivematch.viewmodel.CarsUiState
 import com.example.drivematch.viewmodel.ProfileUiState
+import com.example.drivematch.viewmodel.RentalsUiState
 
 enum class Destination(
     val route: String,
@@ -80,6 +81,7 @@ fun AppNavHost(
     startDestination: Destination,
     uiState: CarsUiState,
     profileUiState: ProfileUiState,
+    rentalsUiState: RentalsUiState,
     onToggleFavourite: (Int) -> Unit,
     onConfirmRent: (carId: Int, hours: Int) -> Unit,
     onEditProfileClick: () -> Unit,
@@ -110,6 +112,7 @@ fun AppNavHost(
 
                     Destination.PROFILE -> ProfileScreen(
                         profile = profileUiState.profile,
+                        rentals = rentalsUiState.items,
                         onEditClick = onEditProfileClick
                     )
                 }

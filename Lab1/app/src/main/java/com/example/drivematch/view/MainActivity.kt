@@ -63,7 +63,7 @@ fun CarsharingContainer(
         factory = ProfileViewModelFactory(InMemoryUserRepository)
     ),
     rentalsViewModel: RentalsViewModel = viewModel(
-        factory = RentalsViewModelFactory(InMemoryRentalRepository)
+        factory = RentalsViewModelFactory(InMemoryRentalRepository, InMemoryCarRepository)
     )
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -104,6 +104,7 @@ fun CarsharingContainer(
     }
     val uiState by carsViewModel.uiState.collectAsStateWithLifecycle()
     val profileUiState by profileViewModel.uiState.collectAsStateWithLifecycle()
+    val rentalsUiState by rentalsViewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         bottomBar = {
             AppNavigationBar(
@@ -124,6 +125,7 @@ fun CarsharingContainer(
             startDestination = Destination.CARS,
             uiState = uiState,
             profileUiState = profileUiState,
+            rentalsUiState = rentalsUiState,
             onToggleFavourite = carsViewModel::onToggleFavourite,
             onConfirmRent = rentalsViewModel::onConfirmRent,
             onEditProfileClick = carsViewModel::onNotImplementedClick,
