@@ -1,7 +1,5 @@
 package com.example.drivematch.component
 
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,11 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.drivematch.R
 import coil3.compose.AsyncImage
+import com.example.drivematch.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
