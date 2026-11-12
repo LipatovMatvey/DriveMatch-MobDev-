@@ -35,13 +35,18 @@ import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
 import com.example.drivematch.component.SpecRow
 import com.example.drivematch.data.sampleUser1
+import com.example.drivematch.model.RentalItem
 import com.example.drivematch.model.User
 import com.example.drivematch.ui.theme.AppTheme
+import androidx.compose.material3.ListItem
+import com.example.drivematch.data.sampleCar1
+import com.example.drivematch.model.Rental
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     profile: User,
+    rentals: List<RentalItem>,
     onEditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -98,6 +103,42 @@ fun ProfileScreen(
                 SpecRow(R.string.profile_license_valid_until, profile.licenseValidUntil)
             }
             Spacer(Modifier.height(24.dp))
+            Text(
+                text = stringResource(R.string.profile_rentals_title),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.align(Alignment.Start)
+            )
+            Spacer(Modifier.height(8.dp))
+            if (rentals.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.profile_rentals_empty),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            } else {
+                OutlinedCard(modifier = Modifier.fillMaxWidth()) {
+                    rentals.forEachIndexed { index, item ->
+                        if (index > 0) {
+                            HorizontalDivider()
+                        }
+                        ListItem(
+                            headlineContent = { Text("${item.car.brand} ${item.car.model}") },
+                            supportingContent = {
+                                Text(stringResource(R.string.rental_hours_value, item.rental.hours))
+                            },
+                            trailingContent = {
+                                Text(
+                                    text = stringResource(
+                                        R.string.rental_price_value,
+                                        item.rental.totalPrice
+                                    ),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+            Spacer(Modifier.height(24.dp))
             Button(
                 onClick = onEditClick,
                 modifier = Modifier.fillMaxWidth()
@@ -116,11 +157,23 @@ fun ProfileScreen(
 @Preview(showBackground = true, name = "Профиль RU", widthDp = 360, heightDp = 750, locale = "ru")
 @Composable
 fun ProfileScreenPreviewRu() {
-    AppTheme { ProfileScreen(profile = sampleUser1, onEditClick = {}) }
+    AppTheme {
+        ProfileScreen(
+            profile = sampleUser1,
+            rentals = listOf(RentalItem(Rental(1, 1, 3, 1050), sampleCar1)),
+            onEditClick = {}
+        )
+    }
 }
 
 @Preview(showBackground = true, name = "Профиль EN", widthDp = 360, heightDp = 750, locale = "en")
 @Composable
 fun ProfileScreenPreviewEn() {
-    AppTheme { ProfileScreen(profile = sampleUser1, onEditClick = {}) }
+    AppTheme {
+        ProfileScreen(
+            profile = sampleUser1,
+            rentals = emptyList(),
+            onEditClick = {}
+        )
+    }
 }
