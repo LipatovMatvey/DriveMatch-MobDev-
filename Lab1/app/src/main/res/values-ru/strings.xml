@@ -83,4 +83,7 @@
     <string name="profile_rentals_empty">Аренд пока нет</string>
     <string name="rental_hours_value">%1$d ч</string>
     <string name="rental_price_value">%1$d ₽</string>
+
+    <string name="error_loading">Не удалось загрузить данные. Проверьте подключение к серверу.</string>
+    <string name="retry">Повторить</string>
 </resources>

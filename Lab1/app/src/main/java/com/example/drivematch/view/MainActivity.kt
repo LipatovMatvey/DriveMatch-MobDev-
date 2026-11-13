@@ -2,6 +2,7 @@ package com.example.drivematch.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,9 +27,13 @@ import com.example.drivematch.component.AppNavHost
 import com.example.drivematch.component.AppNavigationBar
 import com.example.drivematch.component.Destination
 import com.example.drivematch.component.navigateToTab
+import com.example.drivematch.data.AppContainer
 import com.example.drivematch.data.InMemoryCarRepository
 import com.example.drivematch.data.InMemoryRentalRepository
 import com.example.drivematch.data.InMemoryUserRepository
+import com.example.drivematch.data.remote.BASE_URL
+import com.example.drivematch.data.remote.CarApi
+import com.example.drivematch.data.remote.createHttpClient
 import com.example.drivematch.ui.theme.AppTheme
 import com.example.drivematch.viewmodel.CarsEvent
 import com.example.drivematch.viewmodel.CarsViewModel
@@ -57,13 +62,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CarsharingContainer(
     carsViewModel: CarsViewModel = viewModel(
-        factory = CarsViewModelFactory(InMemoryCarRepository)
+        factory = CarsViewModelFactory(AppContainer.carRepository)
     ),
     profileViewModel: ProfileViewModel = viewModel(
         factory = ProfileViewModelFactory(InMemoryUserRepository)
     ),
     rentalsViewModel: RentalsViewModel = viewModel(
-        factory = RentalsViewModelFactory(InMemoryRentalRepository, InMemoryCarRepository)
+        factory = RentalsViewModelFactory(InMemoryRentalRepository, AppContainer.carRepository)
     )
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -129,6 +134,7 @@ fun CarsharingContainer(
             onToggleFavourite = carsViewModel::onToggleFavourite,
             onConfirmRent = rentalsViewModel::onConfirmRent,
             onEditProfileClick = carsViewModel::onNotImplementedClick,
+            onRetryLoad = carsViewModel::loadCars,
             modifier = Modifier.padding(innerPadding)
         )
     }

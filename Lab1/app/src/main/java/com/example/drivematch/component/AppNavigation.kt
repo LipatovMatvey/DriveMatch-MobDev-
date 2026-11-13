@@ -85,6 +85,7 @@ fun AppNavHost(
     onToggleFavourite: (Int) -> Unit,
     onConfirmRent: (carId: Int, hours: Int) -> Unit,
     onEditProfileClick: () -> Unit,
+    onRetryLoad: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -95,20 +96,26 @@ fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.ABOUT -> CarsharingAboutScreen(
-                        nameOrganizations = NAME_ORGANIZATION,
-                        carsCount = uiState.cars.size
-                    )
+                    Destination.ABOUT -> LoadGate(uiState.isLoading, uiState.isError, onRetryLoad) {
+                        CarsharingAboutScreen(
+                            nameOrganizations = NAME_ORGANIZATION,
+                            carsCount = uiState.cars.size
+                        )
+                    }
 
-                    Destination.CARS -> CarListScreen(
-                        cars = uiState.cars,
-                        onCarClick = { car -> navController.navigate(carRoute(car.id)) }
-                    )
+                    Destination.CARS -> LoadGate(uiState.isLoading, uiState.isError, onRetryLoad) {
+                        CarListScreen(
+                            cars = uiState.cars,
+                            onCarClick = { car -> navController.navigate(carRoute(car.id)) }
+                        )
+                    }
 
-                    Destination.FAVOURITES -> FavouritesScreen(
-                        cars = uiState.favouriteCars,
-                        onCarClick = { car -> navController.navigate(carRoute(car.id)) }
-                    )
+                    Destination.FAVOURITES -> LoadGate(uiState.isLoading, uiState.isError, onRetryLoad) {
+                        FavouritesScreen(
+                            cars = uiState.favouriteCars,
+                            onCarClick = { car -> navController.navigate(carRoute(car.id)) }
+                        )
+                    }
 
                     Destination.PROFILE -> ProfileScreen(
                         profile = profileUiState.profile,
@@ -122,32 +129,36 @@ fun AppNavHost(
             route = ROUTE_CAR,
             arguments = listOf(navArgument(ROUTE_CAR_ARG) { type = NavType.IntType })
         ) { entry ->
-            val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
-            val car = uiState.carById(id)
-            if (car != null) {
-                CarDetailsScreen(
-                    car = car,
-                    isFavourite = car.id in uiState.favouriteIds,
-                    onToggleFavourite = { onToggleFavourite(car.id) },
-                    onRentClick = { navController.navigate(rentRoute(car.id)) }
-                )
-            } else {
-                CenteredMessage(text = stringResource(R.string.car_not_found))
+            LoadGate(uiState.isLoading, uiState.isError, onRetryLoad) {
+                val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
+                val car = uiState.carById(id)
+                if (car != null) {
+                    CarDetailsScreen(
+                        car = car,
+                        isFavourite = car.id in uiState.favouriteIds,
+                        onToggleFavourite = { onToggleFavourite(car.id) },
+                        onRentClick = { navController.navigate(rentRoute(car.id)) }
+                    )
+                } else {
+                    CenteredMessage(text = stringResource(R.string.car_not_found))
+                }
             }
         }
         composable(
             route = ROUTE_RENT,
             arguments = listOf(navArgument(ROUTE_CAR_ARG) { type = NavType.IntType })
         ) { entry ->
-            val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
-            val car = uiState.carById(id)
-            if (car != null) {
-                RentScreen(
-                    car = car,
-                    onConfirm = { hours -> onConfirmRent(car.id, hours) }
-                )
-            } else {
-                CenteredMessage(text = stringResource(R.string.car_not_found))
+            LoadGate(uiState.isLoading, uiState.isError, onRetryLoad) {
+                val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
+                val car = uiState.carById(id)
+                if (car != null) {
+                    RentScreen(
+                        car = car,
+                        onConfirm = { hours -> onConfirmRent(car.id, hours) }
+                    )
+                } else {
+                    CenteredMessage(text = stringResource(R.string.car_not_found))
+                }
             }
         }
     }

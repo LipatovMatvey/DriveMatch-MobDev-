@@ -82,4 +82,7 @@
     <string name="profile_rentals_empty">No rentals yet</string>
     <string name="rental_hours_value">%1$d h</string>
     <string name="rental_price_value">%1$d ₽</string>
+
+    <string name="error_loading">Couldn\'t load data. Check your connection to the server.</string>
+    <string name="retry">Retry</string>
 </resources>

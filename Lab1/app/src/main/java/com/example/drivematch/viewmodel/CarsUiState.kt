@@ -6,7 +6,9 @@ import com.example.drivematch.model.Car
 @Stable
 data class CarsUiState(
     val cars: List<Car> = emptyList(),
-    val favouriteIds: Set<Int> = emptySet()
+    val favouriteIds: Set<Int> = emptySet(),
+    val isLoading: Boolean = true,
+    val isError: Boolean = false
 ) {
     val favouriteCars: List<Car>
         get() = cars.filter { it.id in favouriteIds }
