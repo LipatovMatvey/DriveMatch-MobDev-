@@ -41,11 +41,11 @@ private const val MAX_HOURS = 24
 @Composable
 fun RentScreen(
     car: Car,
+    isSubmitting: Boolean = false,
     onConfirm: (hours: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var hours by rememberSaveable { mutableIntStateOf(MIN_HOURS) }
-    var submitted by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -103,11 +103,8 @@ fun RentScreen(
         )
         Spacer(Modifier.height(24.dp))
         Button(
-            onClick = {
-                submitted = true
-                onConfirm(hours)
-            },
-            enabled = !submitted,
+            onClick = { onConfirm(hours) },
+            enabled = !isSubmitting,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(

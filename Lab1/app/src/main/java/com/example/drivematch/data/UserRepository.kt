@@ -7,9 +7,9 @@ interface UserRepository {
     /**
      * Получение пользователя
      */
-    fun getUser(): User
+    suspend fun getUser(): User
 }
 
 object InMemoryUserRepository : UserRepository {
-    override fun getUser(): User = sampleUser1
+    override suspend fun getUser(): User = sampleUser1
 }

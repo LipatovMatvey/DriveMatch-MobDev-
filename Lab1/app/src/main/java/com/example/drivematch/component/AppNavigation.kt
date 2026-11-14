@@ -86,6 +86,7 @@ fun AppNavHost(
     onConfirmRent: (carId: Int, hours: Int) -> Unit,
     onEditProfileClick: () -> Unit,
     onRetryLoad: () -> Unit,
+    onRetryProfile: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -117,11 +118,19 @@ fun AppNavHost(
                         )
                     }
 
-                    Destination.PROFILE -> ProfileScreen(
-                        profile = profileUiState.profile,
-                        rentals = rentalsUiState.items,
-                        onEditClick = onEditProfileClick
-                    )
+                    Destination.PROFILE -> LoadGate(
+                        isLoading = profileUiState.isLoading,
+                        isError = profileUiState.isError,
+                        onRetry = onRetryProfile
+                    ) {
+                        profileUiState.profile?.let { profile ->
+                            ProfileScreen(
+                                profile = profile,
+                                rentals = rentalsUiState.items,
+                                onEditClick = onEditProfileClick
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -154,6 +163,7 @@ fun AppNavHost(
                 if (car != null) {
                     RentScreen(
                         car = car,
+                        isSubmitting = rentalsUiState.isSubmitting,
                         onConfirm = { hours -> onConfirmRent(car.id, hours) }
                     )
                 } else {

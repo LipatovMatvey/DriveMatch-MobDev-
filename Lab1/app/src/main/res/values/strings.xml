@@ -85,4 +85,6 @@
 
     <string name="error_loading">Couldn\'t load data. Check your connection to the server.</string>
     <string name="retry">Retry</string>
+
+    <string name="rent_failed">Couldn\'t complete the rental. Please try again.</string>
 </resources>

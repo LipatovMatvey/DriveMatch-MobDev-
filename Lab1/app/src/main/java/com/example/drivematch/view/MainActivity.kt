@@ -65,15 +65,16 @@ fun CarsharingContainer(
         factory = CarsViewModelFactory(AppContainer.carRepository)
     ),
     profileViewModel: ProfileViewModel = viewModel(
-        factory = ProfileViewModelFactory(InMemoryUserRepository)
+        factory = ProfileViewModelFactory(AppContainer.userRepository)
     ),
     rentalsViewModel: RentalsViewModel = viewModel(
-        factory = RentalsViewModelFactory(InMemoryRentalRepository, AppContainer.carRepository)
+        factory = RentalsViewModelFactory(AppContainer.rentalRepository, AppContainer.carRepository)
     )
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val notImplementedMessage = stringResource(R.string.notice_not_implemented)
     val rentCreatedMessage = stringResource(R.string.rent_created)
+    val rentFailedMessage = stringResource(R.string.rent_failed)
     val scope = rememberCoroutineScope()
     val showMessage: (String) -> Unit = { message ->
         snackbarHostState.currentSnackbarData?.dismiss()
@@ -104,6 +105,7 @@ fun CarsharingContainer(
                     navController.popBackStack()
                     showMessage(rentCreatedMessage)
                 }
+                RentalEvent.Failed -> showMessage(rentFailedMessage)
             }
         }
     }
@@ -135,6 +137,10 @@ fun CarsharingContainer(
             onConfirmRent = rentalsViewModel::onConfirmRent,
             onEditProfileClick = carsViewModel::onNotImplementedClick,
             onRetryLoad = carsViewModel::loadCars,
+            onRetryProfile = {
+                profileViewModel.loadProfile()
+                rentalsViewModel.loadRentals()
+            },
             modifier = Modifier.padding(innerPadding)
         )
     }

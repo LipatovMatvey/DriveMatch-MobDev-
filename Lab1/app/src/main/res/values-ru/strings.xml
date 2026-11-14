@@ -86,4 +86,6 @@
 
     <string name="error_loading">Не удалось загрузить данные. Проверьте подключение к серверу.</string>
     <string name="retry">Повторить</string>
+
+    <string name="rent_failed">Не удалось оформить аренду. Попробуйте ещё раз.</string>
 </resources>

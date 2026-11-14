@@ -6,5 +6,6 @@ import com.example.drivematch.model.RentalItem
 
 @Stable
 data class RentalsUiState(
-    val items: List<RentalItem> = emptyList()
+    val items: List<RentalItem> = emptyList(),
+    val isSubmitting: Boolean = false
 )
