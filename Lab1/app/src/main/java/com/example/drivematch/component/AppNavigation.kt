@@ -25,6 +25,8 @@ import com.example.drivematch.view.CarListScreen
 import com.example.drivematch.view.CarsharingAboutScreen
 import com.example.drivematch.view.FavouritesScreen
 import androidx.compose.ui.Modifier
+import com.example.drivematch.model.User
+import com.example.drivematch.view.ProfileEditScreen
 import com.example.drivematch.view.ProfileScreen
 import com.example.drivematch.view.RentScreen
 import com.example.drivematch.viewmodel.CarsUiState
@@ -48,6 +50,7 @@ const val ROUTE_CAR_ARG = "carId"
 const val ROUTE_CAR = "car/{$ROUTE_CAR_ARG}"
 fun carRoute(id: Int) = "car/$id"
 const val ROUTE_RENT = "rent/{$ROUTE_CAR_ARG}"
+const val ROUTE_PROFILE_EDIT = "profile/edit"
 fun rentRoute(id: Int) = "rent/$id"
 
 fun NavHostController.navigateToTab(destination: Destination) {
@@ -84,7 +87,7 @@ fun AppNavHost(
     rentalsUiState: RentalsUiState,
     onToggleFavourite: (Int) -> Unit,
     onConfirmRent: (carId: Int, hours: Int) -> Unit,
-    onEditProfileClick: () -> Unit,
+    onSaveProfile: (User) -> Unit,
     onRetryLoad: () -> Unit,
     onRetryProfile: () -> Unit,
     modifier: Modifier = Modifier,
@@ -127,7 +130,7 @@ fun AppNavHost(
                             ProfileScreen(
                                 profile = profile,
                                 rentals = rentalsUiState.items,
-                                onEditClick = onEditProfileClick
+                                onEditClick = { navController.navigate(ROUTE_PROFILE_EDIT) }
                             )
                         }
                     }
@@ -168,6 +171,21 @@ fun AppNavHost(
                     )
                 } else {
                     CenteredMessage(text = stringResource(R.string.car_not_found))
+                }
+            }
+        }
+        composable(ROUTE_PROFILE_EDIT) {
+            LoadGate(
+                isLoading = profileUiState.isLoading,
+                isError = profileUiState.isError,
+                onRetry = onRetryProfile
+            ) {
+                profileUiState.profile?.let { profile ->
+                    ProfileEditScreen(
+                        profile = profile,
+                        isSaving = profileUiState.isSaving,
+                        onSave = onSaveProfile
+                    )
                 }
             }
         }

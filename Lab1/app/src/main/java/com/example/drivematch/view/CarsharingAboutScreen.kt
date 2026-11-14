@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
 import com.example.drivematch.component.NAME_ORGANIZATION
 import com.example.drivematch.ui.theme.AppTheme
+import com.example.drivematch.component.StatCard
 
 @Composable
 fun CarsharingAboutScreen(
@@ -98,29 +99,6 @@ fun CarsharingAboutScreen(
                     )
                 },
                 headlineContent = { Text(stringResource(res)) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun StatCard(value: String, label: String, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 15.dp, horizontal = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = value,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                textAlign = TextAlign.Center
             )
         }
     }

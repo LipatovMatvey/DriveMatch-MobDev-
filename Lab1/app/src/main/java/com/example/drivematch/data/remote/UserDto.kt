@@ -23,3 +23,13 @@ fun UserDto.toModel(): User = User(
     licenseNumber = licenseNumber,
     licenseValidUntil = licenseValidUntil
 )
+
+fun User.toDto(): UserDto = UserDto(
+    id = id,
+    fullName = fullName,
+    birthDate = birthDate,
+    city = city,
+    licenseCategory = licenseCategory,
+    licenseNumber = licenseNumber,
+    licenseValidUntil = licenseValidUntil
+)

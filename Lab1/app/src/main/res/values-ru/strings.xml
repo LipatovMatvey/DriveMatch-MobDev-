@@ -88,4 +88,10 @@
     <string name="retry">Повторить</string>
 
     <string name="rent_failed">Не удалось оформить аренду. Попробуйте ещё раз.</string>
+
+    <string name="profile_edit_title">Редактирование профиля</string>
+    <string name="profile_full_name_label">ФИО</string>
+    <string name="profile_save">Сохранить</string>
+    <string name="profile_saved">Профиль сохранён</string>
+    <string name="profile_save_failed">Не удалось сохранить профиль. Попробуйте ещё раз.</string>
 </resources>

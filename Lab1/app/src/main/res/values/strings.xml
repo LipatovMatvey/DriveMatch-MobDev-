@@ -87,4 +87,10 @@
     <string name="retry">Retry</string>
 
     <string name="rent_failed">Couldn\'t complete the rental. Please try again.</string>
+
+    <string name="profile_edit_title">Edit profile</string>
+    <string name="profile_full_name_label">Full name</string>
+    <string name="profile_save">Save</string>
+    <string name="profile_saved">Profile saved</string>
+    <string name="profile_save_failed">Couldn\'t save profile. Please try again.</string>
 </resources>

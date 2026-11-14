@@ -7,5 +7,6 @@ import com.example.drivematch.model.User
 data class ProfileUiState(
     val profile: User? = null,
     val isLoading: Boolean = true,
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val isSaving: Boolean = false
 )

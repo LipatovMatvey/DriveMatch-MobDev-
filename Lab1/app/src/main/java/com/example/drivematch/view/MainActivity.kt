@@ -2,7 +2,6 @@ package com.example.drivematch.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -28,16 +27,11 @@ import com.example.drivematch.component.AppNavigationBar
 import com.example.drivematch.component.Destination
 import com.example.drivematch.component.navigateToTab
 import com.example.drivematch.data.AppContainer
-import com.example.drivematch.data.InMemoryCarRepository
-import com.example.drivematch.data.InMemoryRentalRepository
-import com.example.drivematch.data.InMemoryUserRepository
-import com.example.drivematch.data.remote.BASE_URL
-import com.example.drivematch.data.remote.CarApi
-import com.example.drivematch.data.remote.createHttpClient
 import com.example.drivematch.ui.theme.AppTheme
 import com.example.drivematch.viewmodel.CarsEvent
 import com.example.drivematch.viewmodel.CarsViewModel
 import com.example.drivematch.viewmodel.CarsViewModelFactory
+import com.example.drivematch.viewmodel.ProfileEvent
 import com.example.drivematch.viewmodel.ProfileViewModel
 import com.example.drivematch.viewmodel.ProfileViewModelFactory
 import com.example.drivematch.viewmodel.RentalEvent
@@ -74,6 +68,8 @@ fun CarsharingContainer(
     val snackbarHostState = remember { SnackbarHostState() }
     val notImplementedMessage = stringResource(R.string.notice_not_implemented)
     val rentCreatedMessage = stringResource(R.string.rent_created)
+    val profileSavedMessage = stringResource(R.string.profile_saved)
+    val profileSaveFailedMessage = stringResource(R.string.profile_save_failed)
     val rentFailedMessage = stringResource(R.string.rent_failed)
     val scope = rememberCoroutineScope()
     val showMessage: (String) -> Unit = { message ->
@@ -109,6 +105,17 @@ fun CarsharingContainer(
             }
         }
     }
+    LaunchedEffect(Unit) {
+        profileViewModel.events.collect { event ->
+            when (event) {
+                ProfileEvent.Saved -> {
+                    navController.popBackStack()
+                    showMessage(profileSavedMessage)
+                }
+                ProfileEvent.SaveFailed -> showMessage(profileSaveFailedMessage)
+            }
+        }
+    }
     val uiState by carsViewModel.uiState.collectAsStateWithLifecycle()
     val profileUiState by profileViewModel.uiState.collectAsStateWithLifecycle()
     val rentalsUiState by rentalsViewModel.uiState.collectAsStateWithLifecycle()
@@ -135,7 +142,7 @@ fun CarsharingContainer(
             rentalsUiState = rentalsUiState,
             onToggleFavourite = carsViewModel::onToggleFavourite,
             onConfirmRent = rentalsViewModel::onConfirmRent,
-            onEditProfileClick = carsViewModel::onNotImplementedClick,
+            onSaveProfile = profileViewModel::onSave,
             onRetryLoad = carsViewModel::loadCars,
             onRetryProfile = {
                 profileViewModel.loadProfile()

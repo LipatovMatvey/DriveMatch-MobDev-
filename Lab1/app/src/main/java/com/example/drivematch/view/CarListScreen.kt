@@ -34,6 +34,7 @@ import com.example.drivematch.component.CenteredMessage
 import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
+import com.example.drivematch.component.CarRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,41 +74,6 @@ fun CarListScreen(
                     CarRow(car = car, onCarClick = { onCarClick(car) })
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun CarRow(
-    car: Car,
-    onCarClick: () -> Unit
-) {
-    Card(
-        onClick = onCarClick,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(
-                    R.string.car_title_with_year, car.brand, car.model, car.year
-                ),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            AsyncImage(
-                model = car.photos.firstOrNull(),
-                contentDescription = null,
-                placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
-                error = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(width = 100.dp, height = 70.dp)
-                    .clip(MaterialTheme.shapes.medium)
-            )
         }
     }
 }

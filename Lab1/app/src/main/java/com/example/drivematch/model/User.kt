@@ -36,3 +36,7 @@ data class User(
      */
     val licenseValidUntil: String
 )
+
+fun User.hasBlankFields(): Boolean = listOf(
+    fullName, birthDate, city, licenseCategory, licenseNumber, licenseValidUntil
+).any { it.isBlank() }
