@@ -131,13 +131,11 @@ fun AppNavHost(
                         isError = profileUiState.isError,
                         onRetry = onRetryProfile
                     ) {
-                        profileUiState.profile?.let { profile ->
-                            ProfileScreen(
-                                profile = profile,
-                                rentals = rentalsUiState.items,
-                                onEditClick = { navController.navigate(ROUTE_PROFILE_EDIT) }
-                            )
-                        }
+                        ProfileScreen(
+                            uiState = profileUiState,
+                            rentals = rentalsUiState.items,
+                            onEditClick = { navController.navigate(ROUTE_PROFILE_EDIT) }
+                        )
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package com.example.drivematch.view
 
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -41,15 +43,24 @@ import com.example.drivematch.ui.theme.AppTheme
 import androidx.compose.material3.ListItem
 import com.example.drivematch.data.sampleCar1
 import com.example.drivematch.model.Rental
+import com.example.drivematch.viewmodel.ProfileUiState
+import com.example.drivematch.viewmodel.RentalsUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    profile: User,
+    uiState: ProfileUiState,
     rentals: List<RentalItem>,
     onEditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val profile = uiState.profile
+    if (profile == null) {
+        Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -86,7 +97,7 @@ fun ProfileScreen(
             }
             Spacer(Modifier.height(16.dp))
             Text(
-                text = profile.fullName,
+                text = uiState.profile.fullName,
                 style = MaterialTheme.typography.headlineSmall,
                 textAlign = TextAlign.Center
             )
@@ -159,7 +170,7 @@ fun ProfileScreen(
 fun ProfileScreenPreviewRu() {
     AppTheme {
         ProfileScreen(
-            profile = sampleUser1,
+            uiState = ProfileUiState(profile = sampleUser1),
             rentals = listOf(RentalItem(Rental(1, 1, 3, 1050), sampleCar1)),
             onEditClick = {}
         )
@@ -171,7 +182,7 @@ fun ProfileScreenPreviewRu() {
 fun ProfileScreenPreviewEn() {
     AppTheme {
         ProfileScreen(
-            profile = sampleUser1,
+            uiState = ProfileUiState(profile = sampleUser1),
             rentals = emptyList(),
             onEditClick = {}
         )
