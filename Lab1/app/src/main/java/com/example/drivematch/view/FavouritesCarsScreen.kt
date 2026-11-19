@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
+import com.example.drivematch.component.CarRow
 import com.example.drivematch.component.CenteredMessage
 import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car

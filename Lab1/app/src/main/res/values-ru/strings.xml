@@ -94,4 +94,12 @@
     <string name="profile_save">Сохранить</string>
     <string name="profile_saved">Профиль сохранён</string>
     <string name="profile_save_failed">Не удалось сохранить профиль. Попробуйте ещё раз.</string>
+
+    <string name="error_field_empty">Поле не может быть пустым</string>
+    <string name="error_full_name">Введите фамилию и имя (и отчество) буквами</string>
+    <string name="error_license_number">Номер ВУ — 10 цифр, например 99 12 345678</string>
+    <string name="error_date_format">Введите существующую дату в формате ДД.ММ.ГГГГ</string>
+    <string name="error_license_expired">Срок действия прав истёк</string>
+    <string name="profile_birth_date_readonly">Дату рождения изменить нельзя</string>
+    <string name="profile_date_hint">Формат: ДД.ММ.ГГГГ</string>
 </resources>

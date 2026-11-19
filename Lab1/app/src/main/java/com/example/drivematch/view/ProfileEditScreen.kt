@@ -1,6 +1,5 @@
 package com.example.drivematch.view
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -29,11 +27,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
+import com.example.drivematch.component.ProfileTextField
 import com.example.drivematch.data.sampleUser1
+import com.example.drivematch.model.ProfileField
 import com.example.drivematch.model.User
 import com.example.drivematch.model.hasBlankFields
+import com.example.drivematch.model.validate
 import com.example.drivematch.ui.theme.AppTheme
-import com.example.drivematch.component.ProfileField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +44,6 @@ fun ProfileEditScreen(
     isSaving: Boolean = false
 ) {
     var fullName by rememberSaveable { mutableStateOf(profile.fullName) }
-    var birthDate by rememberSaveable { mutableStateOf(profile.birthDate) }
     var city by rememberSaveable { mutableStateOf(profile.city) }
     var licenseCategory by rememberSaveable { mutableStateOf(profile.licenseCategory) }
     var licenseNumber by rememberSaveable { mutableStateOf(profile.licenseNumber) }
@@ -52,12 +51,12 @@ fun ProfileEditScreen(
 
     val draft = profile.copy(
         fullName = fullName.trim(),
-        birthDate = birthDate.trim(),
         city = city.trim(),
         licenseCategory = licenseCategory.trim(),
         licenseNumber = licenseNumber.trim(),
         licenseValidUntil = licenseValidUntil.trim()
     )
+    val errors = draft.validate()
 
     Scaffold(
         modifier = modifier,
@@ -82,16 +81,54 @@ fun ProfileEditScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            ProfileField(R.string.profile_full_name_label, fullName, { fullName = it }, !isSaving)
-            ProfileField(R.string.profile_birth_date, birthDate, { birthDate = it }, !isSaving)
-            ProfileField(R.string.profile_city, city, { city = it }, !isSaving)
-            ProfileField(R.string.profile_license_category, licenseCategory, { licenseCategory = it }, !isSaving)
-            ProfileField(R.string.profile_license_number, licenseNumber, { licenseNumber = it }, !isSaving)
-            ProfileField(R.string.profile_license_valid_until, licenseValidUntil, { licenseValidUntil = it }, !isSaving)
+            ProfileTextField(
+                labelRes = R.string.profile_full_name_label,
+                value = fullName,
+                onValueChange = { fullName = it },
+                enabled = ! isSaving,
+                error = errors[ProfileField.FULL_NAME]
+            )
+            ProfileTextField(
+                labelRes = R.string.profile_birth_date,
+                value = profile.birthDate,
+                onValueChange = {},
+                enabled = ! isSaving,
+                readOnly = true,
+                hintRes = R.string.profile_birth_date_readonly
+            )
+            ProfileTextField(
+                labelRes = R.string.profile_city,
+                value = city,
+                onValueChange = { city = it },
+                enabled = ! isSaving,
+                error = errors[ProfileField.CITY]
+            )
+            ProfileTextField(
+                labelRes = R.string.profile_license_category,
+                value = licenseCategory,
+                onValueChange = { licenseCategory = it },
+                enabled = ! isSaving,
+                error = errors[ProfileField.LICENSE_CATEGORY]
+            )
+            ProfileTextField(
+                labelRes = R.string.profile_license_number,
+                value = licenseNumber,
+                onValueChange = { licenseNumber = it },
+                enabled = ! isSaving,
+                error = errors[ProfileField.LICENSE_NUMBER],
+            )
+            ProfileTextField(
+                labelRes = R.string.profile_license_valid_until,
+                value = licenseValidUntil,
+                onValueChange = { licenseValidUntil = it },
+                enabled = ! isSaving,
+                error = errors[ProfileField.LICENSE_VALID_UNTIL],
+                hintRes = R.string.profile_date_hint
+            )
             Spacer(Modifier.height(8.dp))
             Button(
                 onClick = { onSave(draft) },
-                enabled = !isSaving && !draft.hasBlankFields(),
+                enabled = ! isSaving && ! draft.hasBlankFields(),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -103,13 +140,25 @@ fun ProfileEditScreen(
     }
 }
 
-@Preview(showBackground = true, name = "Редактирование RU", widthDp = 360, heightDp = 750, locale = "ru")
+@Preview(
+    showBackground = true,
+    name = "Редактирование RU",
+    widthDp = 360,
+    heightDp = 750,
+    locale = "ru"
+)
 @Composable
 fun ProfileEditScreenPreviewRu() {
     AppTheme { ProfileEditScreen(profile = sampleUser1, onSave = {}) }
 }
 
-@Preview(showBackground = true, name = "Редактирование EN", widthDp = 360, heightDp = 750, locale = "en")
+@Preview(
+    showBackground = true,
+    name = "Редактирование EN",
+    widthDp = 360,
+    heightDp = 750,
+    locale = "en"
+)
 @Composable
 fun ProfileEditScreenPreviewEn() {
     AppTheme { ProfileEditScreen(profile = sampleUser1, onSave = {}) }

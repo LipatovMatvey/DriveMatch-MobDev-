@@ -93,4 +93,12 @@
     <string name="profile_save">Save</string>
     <string name="profile_saved">Profile saved</string>
     <string name="profile_save_failed">Couldn\'t save profile. Please try again.</string>
+
+    <string name="error_field_empty">This field can\'t be empty</string>
+    <string name="error_full_name">Enter last and first name (and patronymic) using letters</string>
+    <string name="error_license_number">License number is 10 digits, e.g. 99 12 345678</string>
+    <string name="error_date_format">Enter an existing date as DD.MM.YYYY</string>
+    <string name="error_license_expired">The license has expired</string>
+    <string name="profile_birth_date_readonly">Birth date can\'t be changed</string>
+    <string name="profile_date_hint">Format: DD.MM.YYYY</string>
 </resources>

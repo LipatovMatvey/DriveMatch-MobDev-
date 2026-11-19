@@ -56,7 +56,7 @@ val carsData = listOf(
             drawable(R.drawable.bmw_x5_8),
             drawable(R.drawable.bmw_x5_9),
             drawable(R.drawable.bmw_x5_10),
-            drawable(R.drawable.bmw_x5_12),
+            drawable(R.drawable.bmw_x5_11),
             drawable(R.drawable.bmw_x5_12),
         ),
         horsepower = 313,

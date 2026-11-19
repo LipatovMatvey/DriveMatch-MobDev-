@@ -9,6 +9,9 @@ interface UserRepository {
      */
     suspend fun getUser(): User
 
+    /**
+     * Обновление пользователя
+     */
     suspend fun updateUser(user: User): User
 }
 

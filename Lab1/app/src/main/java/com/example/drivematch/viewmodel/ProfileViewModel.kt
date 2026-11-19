@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drivematch.data.UserRepository
 import com.example.drivematch.model.User
+import com.example.drivematch.model.normalized
+import com.example.drivematch.model.validate
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,12 +32,15 @@ class ProfileViewModel(
     private val _events = Channel<ProfileEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
-    fun onSave(user: User) {
+    fun onSave(draft: User) {
+        val current = _uiState.value.profile ?: return
         if (_uiState.value.isSaving) return
+        val user = draft.copy(id = current.id, birthDate = current.birthDate)
+        if (user.validate().isNotEmpty()) return
         _uiState.update { it.copy(isSaving = true) }
         viewModelScope.launch {
             try {
-                val saved = repository.updateUser(user)
+                val saved = repository.updateUser(user.normalized())
                 _uiState.update { it.copy(profile = saved) }
                 _events.trySend(ProfileEvent.Saved)
             } catch (e: CancellationException) {
@@ -50,7 +55,6 @@ class ProfileViewModel(
     }
 
     private var loadJob: Job? = null
-
     init {
         loadProfile()
     }
