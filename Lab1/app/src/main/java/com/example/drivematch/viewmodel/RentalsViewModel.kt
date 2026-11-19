@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drivematch.data.CarRepository
 import com.example.drivematch.data.RentalRepository
+import com.example.drivematch.model.Car
 import com.example.drivematch.model.RentalItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,16 +48,16 @@ class RentalsViewModel(
         }
     }
 
-    fun onConfirmRent(carId: Int, hours: Int) {
-        if (_uiState.value.isSubmitting) return
+    fun onConfirmRent() {
+        val state = _uiState.value
+        val car = state.selectedCar ?: return
+        if (state.isSubmitting) return
         _uiState.update { it.copy(isSubmitting = true) }
         viewModelScope.launch {
             try {
-                val rental = rentalRepository.createRental(carId, hours)
-                val car = carRepository.getCars().firstOrNull { it.id == rental.carId }
-                _uiState.update { state ->
-                    if (car == null) state
-                    else state.copy(items = listOf(RentalItem(rental, car)) + state.items)
+                val rental = rentalRepository.createRental(car.id, state.hours)
+                _uiState.update { current ->
+                    current.copy(items = listOf(RentalItem(rental, car)) + current.items)
                 }
                 _events.trySend(RentalEvent.Created)
             } catch (e: CancellationException) {
@@ -80,4 +81,25 @@ class RentalsViewModel(
             }
             .asReversed()
     }
+
+    fun selectCar(car: Car) {
+        _uiState.update {
+            it.copy(selectedCar = car, hours = MIN_RENT_HOURS)
+        }
+    }
+
+    fun onIncreaseHours() {
+        _uiState.update { state ->
+            if (state.hours >= MAX_RENT_HOURS) state
+            else state.copy(hours = state.hours + 1)
+        }
+    }
+
+    fun onDecreaseHours() {
+        _uiState.update { state ->
+            if (state.hours <= MIN_RENT_HOURS) state
+            else state.copy(hours = state.hours - 1)
+        }
+    }
+
 }

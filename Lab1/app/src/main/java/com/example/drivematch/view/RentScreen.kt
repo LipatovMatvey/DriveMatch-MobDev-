@@ -1,6 +1,7 @@
 package com.example.drivematch.view
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,17 +15,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,21 +29,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
 import com.example.drivematch.data.sampleCar1
-import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
+import com.example.drivematch.viewmodel.RentalsUiState
 
-private const val MIN_HOURS = 1
-private const val MAX_HOURS = 24
 
 @Composable
 fun RentScreen(
-    car: Car,
-    isSubmitting: Boolean = false,
-    onConfirm: (hours: Int) -> Unit,
+    uiState: RentalsUiState,
+    onIncreaseHours: () -> Unit,
+    onDecreaseHours: () -> Unit,
+    onConfirm: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var hours by rememberSaveable { mutableIntStateOf(MIN_HOURS) }
-
+    val car = uiState.selectedCar
+    if (car == null) {
+        Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -74,8 +75,8 @@ fun RentScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedIconButton(
-                onClick = { hours-- },
-                enabled = hours > MIN_HOURS
+                onClick = onDecreaseHours,
+                enabled = uiState.canDecreaseHours && ! uiState.isSubmitting
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
@@ -83,12 +84,12 @@ fun RentScreen(
                 )
             }
             Text(
-                text = hours.toString(),
+                text = uiState.hours.toString(),
                 style = MaterialTheme.typography.headlineMedium
             )
             OutlinedIconButton(
-                onClick = { hours++ },
-                enabled = hours < MAX_HOURS
+                onClick = onIncreaseHours,
+                enabled = uiState.canIncreaseHours && ! uiState.isSubmitting
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowForward,
@@ -98,13 +99,13 @@ fun RentScreen(
         }
         Spacer(Modifier.height(24.dp))
         Text(
-            text = stringResource(R.string.rent_total, car.priceFor(hours)),
+            text = stringResource(R.string.rent_total, uiState.totalPrice),
             style = MaterialTheme.typography.headlineSmall
         )
         Spacer(Modifier.height(24.dp))
         Button(
-            onClick = { onConfirm(hours) },
-            enabled = !isSubmitting,
+            onClick = onConfirm,
+            enabled = ! uiState.isSubmitting,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -120,7 +121,11 @@ fun RentScreen(
 fun RentScreenPreviewRu() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            RentScreen(car = sampleCar1, onConfirm = {})
+            RentScreen(
+                uiState = RentalsUiState(selectedCar = sampleCar1, hours = 3),
+                onIncreaseHours = {},
+                onDecreaseHours = {},
+                onConfirm = {})
         }
     }
 }
@@ -130,7 +135,11 @@ fun RentScreenPreviewRu() {
 fun RentScreenPreviewEn() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            RentScreen(car = sampleCar1, onConfirm = {})
+            RentScreen(
+                uiState = RentalsUiState(selectedCar = sampleCar1, hours = 3),
+                onIncreaseHours = {},
+                onDecreaseHours = {},
+                onConfirm = {})
         }
     }
 }

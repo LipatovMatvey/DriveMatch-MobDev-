@@ -10,6 +10,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -25,6 +26,7 @@ import com.example.drivematch.view.CarListScreen
 import com.example.drivematch.view.CarsharingAboutScreen
 import com.example.drivematch.view.FavouritesScreen
 import androidx.compose.ui.Modifier
+import com.example.drivematch.model.Car
 import com.example.drivematch.model.User
 import com.example.drivematch.view.ProfileEditScreen
 import com.example.drivematch.view.ProfileScreen
@@ -86,7 +88,10 @@ fun AppNavHost(
     profileUiState: ProfileUiState,
     rentalsUiState: RentalsUiState,
     onToggleFavourite: (Int) -> Unit,
-    onConfirmRent: (carId: Int, hours: Int) -> Unit,
+    onSelectCar: (Car) -> Unit,
+    onIncreaseHours: () -> Unit,
+    onDecreaseHours: () -> Unit,
+    onConfirmRent: () -> Unit,
     onSaveProfile: (User) -> Unit,
     onRetryLoad: () -> Unit,
     onRetryProfile: () -> Unit,
@@ -164,10 +169,14 @@ fun AppNavHost(
                 val id = entry.arguments?.getInt(ROUTE_CAR_ARG)
                 val car = uiState.carById(id)
                 if (car != null) {
+                    LaunchedEffect(car.id) {
+                        onSelectCar(car)
+                    }
                     RentScreen(
-                        car = car,
-                        isSubmitting = rentalsUiState.isSubmitting,
-                        onConfirm = { hours -> onConfirmRent(car.id, hours) }
+                        uiState = rentalsUiState,
+                        onIncreaseHours = onIncreaseHours,
+                        onDecreaseHours = onDecreaseHours,
+                        onConfirm = onConfirmRent
                     )
                 } else {
                     CenteredMessage(text = stringResource(R.string.car_not_found))
