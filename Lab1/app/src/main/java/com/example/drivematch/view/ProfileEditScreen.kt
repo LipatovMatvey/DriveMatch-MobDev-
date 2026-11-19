@@ -34,30 +34,17 @@ import com.example.drivematch.model.User
 import com.example.drivematch.model.hasBlankFields
 import com.example.drivematch.model.validate
 import com.example.drivematch.ui.theme.AppTheme
+import com.example.drivematch.viewmodel.ProfileEditState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileEditScreen(
-    profile: User,
-    onSave: (User) -> Unit,
-    modifier: Modifier = Modifier,
-    isSaving: Boolean = false
+    editState: ProfileEditState,
+    isSaving: Boolean,
+    onFieldChange: (ProfileField, String) -> Unit,
+    onSave: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    var fullName by rememberSaveable { mutableStateOf(profile.fullName) }
-    var city by rememberSaveable { mutableStateOf(profile.city) }
-    var licenseCategory by rememberSaveable { mutableStateOf(profile.licenseCategory) }
-    var licenseNumber by rememberSaveable { mutableStateOf(profile.licenseNumber) }
-    var licenseValidUntil by rememberSaveable { mutableStateOf(profile.licenseValidUntil) }
-
-    val draft = profile.copy(
-        fullName = fullName.trim(),
-        city = city.trim(),
-        licenseCategory = licenseCategory.trim(),
-        licenseNumber = licenseNumber.trim(),
-        licenseValidUntil = licenseValidUntil.trim()
-    )
-    val errors = draft.validate()
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -83,52 +70,52 @@ fun ProfileEditScreen(
         ) {
             ProfileTextField(
                 labelRes = R.string.profile_full_name_label,
-                value = fullName,
-                onValueChange = { fullName = it },
+                value = editState.fullName,
+                onValueChange = { onFieldChange(ProfileField.FULL_NAME, it) },
                 enabled = ! isSaving,
-                error = errors[ProfileField.FULL_NAME]
+                error = editState.errors[ProfileField.FULL_NAME]
             )
             ProfileTextField(
                 labelRes = R.string.profile_birth_date,
-                value = profile.birthDate,
+                value = editState.birthDate,
                 onValueChange = {},
-                enabled = ! isSaving,
+                enabled = !isSaving,
                 readOnly = true,
                 hintRes = R.string.profile_birth_date_readonly
             )
             ProfileTextField(
                 labelRes = R.string.profile_city,
-                value = city,
-                onValueChange = { city = it },
-                enabled = ! isSaving,
-                error = errors[ProfileField.CITY]
+                value = editState.city,
+                onValueChange = { onFieldChange(ProfileField.CITY, it) },
+                enabled = !isSaving,
+                error = editState.errors[ProfileField.CITY]
             )
             ProfileTextField(
                 labelRes = R.string.profile_license_category,
-                value = licenseCategory,
-                onValueChange = { licenseCategory = it },
-                enabled = ! isSaving,
-                error = errors[ProfileField.LICENSE_CATEGORY]
+                value = editState.licenseCategory,
+                onValueChange = { onFieldChange(ProfileField.LICENSE_CATEGORY, it) },
+                enabled = !isSaving,
+                error = editState.errors[ProfileField.LICENSE_CATEGORY]
             )
             ProfileTextField(
                 labelRes = R.string.profile_license_number,
-                value = licenseNumber,
-                onValueChange = { licenseNumber = it },
-                enabled = ! isSaving,
-                error = errors[ProfileField.LICENSE_NUMBER],
+                value = editState.licenseNumber,
+                onValueChange = { onFieldChange(ProfileField.LICENSE_NUMBER, it) },
+                enabled = !isSaving,
+                error = editState.errors[ProfileField.LICENSE_NUMBER]
             )
             ProfileTextField(
                 labelRes = R.string.profile_license_valid_until,
-                value = licenseValidUntil,
-                onValueChange = { licenseValidUntil = it },
-                enabled = ! isSaving,
-                error = errors[ProfileField.LICENSE_VALID_UNTIL],
+                value = editState.licenseValidUntil,
+                onValueChange = { onFieldChange(ProfileField.LICENSE_VALID_UNTIL, it) },
+                enabled = !isSaving,
+                error = editState.errors[ProfileField.LICENSE_VALID_UNTIL],
                 hintRes = R.string.profile_date_hint
             )
             Spacer(Modifier.height(8.dp))
             Button(
-                onClick = { onSave(draft) },
-                enabled = ! isSaving && ! draft.hasBlankFields(),
+                onClick = onSave,
+                enabled = editState.isValid && !isSaving,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -149,7 +136,22 @@ fun ProfileEditScreen(
 )
 @Composable
 fun ProfileEditScreenPreviewRu() {
-    AppTheme { ProfileEditScreen(profile = sampleUser1, onSave = {}) }
+    AppTheme {
+        ProfileEditScreen(
+            editState = ProfileEditState(
+                fullName = "Иванов Иван Иванович",
+                birthDate = "15.03.1995",
+                city = "Москва",
+                licenseCategory = "B, B1",
+                licenseNumber = "99 12 345678",
+                licenseValidUntil = "20.06.2032",
+                isValid = true
+            ),
+            isSaving = false,
+            onFieldChange = { _, _ -> },
+            onSave = {}
+        )
+    }
 }
 
 @Preview(
@@ -161,5 +163,20 @@ fun ProfileEditScreenPreviewRu() {
 )
 @Composable
 fun ProfileEditScreenPreviewEn() {
-    AppTheme { ProfileEditScreen(profile = sampleUser1, onSave = {}) }
+    AppTheme {
+        ProfileEditScreen(
+            editState = ProfileEditState(
+                fullName = "John Doe",
+                birthDate = "15.03.1995",
+                city = "New York",
+                licenseCategory = "B, B1",
+                licenseNumber = "99 12 345678",
+                licenseValidUntil = "20.06.2032",
+                isValid = true
+            ),
+            isSaving = false,
+            onFieldChange = { _, _ -> },
+            onSave = {}
+        )
+    }
 }

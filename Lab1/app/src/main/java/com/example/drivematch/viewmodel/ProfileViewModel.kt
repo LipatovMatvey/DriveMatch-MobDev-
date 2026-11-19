@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drivematch.data.UserRepository
+import com.example.drivematch.model.ProfileField
 import com.example.drivematch.model.User
+import com.example.drivematch.model.hasBlankFields
 import com.example.drivematch.model.normalized
 import com.example.drivematch.model.validate
 import kotlinx.coroutines.Job
@@ -32,16 +34,22 @@ class ProfileViewModel(
     private val _events = Channel<ProfileEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
-    fun onSave(draft: User) {
-        val current = _uiState.value.profile ?: return
-        if (_uiState.value.isSaving) return
-        val user = draft.copy(id = current.id, birthDate = current.birthDate)
-        if (user.validate().isNotEmpty()) return
+    fun onSave() {
+        val editState = _uiState.value.editState ?: return
+        val currentProfile = _uiState.value.profile ?: return
+        if (!editState.isValid || _uiState.value.isSaving) return
+        val user = currentProfile.copy(
+            fullName = editState.fullName.trim(),
+            city = editState.city.trim(),
+            licenseCategory = editState.licenseCategory.trim(),
+            licenseNumber = editState.licenseNumber.trim(),
+            licenseValidUntil = editState.licenseValidUntil.trim()
+        )
         _uiState.update { it.copy(isSaving = true) }
         viewModelScope.launch {
             try {
                 val saved = repository.updateUser(user.normalized())
-                _uiState.update { it.copy(profile = saved) }
+                _uiState.update { it.copy(profile = saved, editState = null) }
                 _events.trySend(ProfileEvent.Saved)
             } catch (e: CancellationException) {
                 throw e
@@ -73,5 +81,48 @@ class ProfileViewModel(
                 _uiState.update { it.copy(isLoading = false, isError = true) }
             }
         }
+    }
+
+    fun startEditing() {
+        val profile = _uiState.value.profile ?: return
+        val errors = profile.validate()
+        _uiState.update {
+            it.copy(
+                editState = ProfileEditState(
+                    fullName = profile.fullName,
+                    birthDate = profile.birthDate,
+                    city = profile.city,
+                    licenseCategory = profile.licenseCategory,
+                    licenseNumber = profile.licenseNumber,
+                    licenseValidUntil = profile.licenseValidUntil,
+                    errors = errors,
+                    isValid = errors.isEmpty() && !profile.hasBlankFields()
+                )
+            )
+        }
+    }
+
+    fun onFieldChange(field: ProfileField, value: String) {
+        val current = _uiState.value.editState ?: return
+        val updated = when (field) {
+            ProfileField.FULL_NAME -> current.copy(fullName = value)
+            ProfileField.CITY -> current.copy(city = value)
+            ProfileField.LICENSE_CATEGORY -> current.copy(licenseCategory = value)
+            ProfileField.LICENSE_NUMBER -> current.copy(licenseNumber = value)
+            ProfileField.LICENSE_VALID_UNTIL -> current.copy(licenseValidUntil = value)
+            else -> current
+        }
+
+        val draftUser = _uiState.value.profile?.copy(
+            fullName = updated.fullName.trim(),
+            city = updated.city.trim(),
+            licenseCategory = updated.licenseCategory.trim(),
+            licenseNumber = updated.licenseNumber.trim(),
+            licenseValidUntil = updated.licenseValidUntil.trim()
+        )
+        val errors = draftUser?.validate() ?: emptyMap()
+        val isValid = errors.isEmpty() && draftUser?.hasBlankFields() == false
+
+        _uiState.update { it.copy(editState = updated.copy(errors = errors, isValid = isValid)) }
     }
 }

@@ -8,5 +8,6 @@ data class ProfileUiState(
     val profile: User? = null,
     val isLoading: Boolean = true,
     val isError: Boolean = false,
-    val isSaving: Boolean = false
+    val isSaving: Boolean = false,
+    val editState: ProfileEditState? = null
 )

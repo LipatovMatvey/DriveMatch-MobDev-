@@ -119,6 +119,7 @@ fun CarsharingContainer(
     val uiState by carsViewModel.uiState.collectAsStateWithLifecycle()
     val profileUiState by profileViewModel.uiState.collectAsStateWithLifecycle()
     val rentalsUiState by rentalsViewModel.uiState.collectAsStateWithLifecycle()
+
     Scaffold(
         bottomBar = {
             AppNavigationBar(
@@ -145,6 +146,8 @@ fun CarsharingContainer(
             onIncreaseHours = rentalsViewModel::onIncreaseHours,
             onDecreaseHours = rentalsViewModel::onDecreaseHours,
             onConfirmRent = rentalsViewModel::onConfirmRent,
+            onStartEditingProfile = profileViewModel::startEditing,
+            onEditProfileFieldChange = profileViewModel::onFieldChange,
             onSaveProfile = profileViewModel::onSave,
             onRetryLoad = carsViewModel::loadCars,
             onRetryProfile = {

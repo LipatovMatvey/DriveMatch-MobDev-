@@ -27,11 +27,13 @@ import com.example.drivematch.view.CarsharingAboutScreen
 import com.example.drivematch.view.FavouritesScreen
 import androidx.compose.ui.Modifier
 import com.example.drivematch.model.Car
+import com.example.drivematch.model.ProfileField
 import com.example.drivematch.model.User
 import com.example.drivematch.view.ProfileEditScreen
 import com.example.drivematch.view.ProfileScreen
 import com.example.drivematch.view.RentScreen
 import com.example.drivematch.viewmodel.CarsUiState
+import com.example.drivematch.viewmodel.ProfileEditState
 import com.example.drivematch.viewmodel.ProfileUiState
 import com.example.drivematch.viewmodel.RentalsUiState
 
@@ -92,7 +94,9 @@ fun AppNavHost(
     onIncreaseHours: () -> Unit,
     onDecreaseHours: () -> Unit,
     onConfirmRent: () -> Unit,
-    onSaveProfile: (User) -> Unit,
+    onStartEditingProfile: () -> Unit,
+    onEditProfileFieldChange: (ProfileField, String) -> Unit,
+    onSaveProfile: () -> Unit,
     onRetryLoad: () -> Unit,
     onRetryProfile: () -> Unit,
     modifier: Modifier = Modifier,
@@ -134,7 +138,10 @@ fun AppNavHost(
                         ProfileScreen(
                             uiState = profileUiState,
                             rentals = rentalsUiState.items,
-                            onEditClick = { navController.navigate(ROUTE_PROFILE_EDIT) }
+                            onEditClick = {
+                                onStartEditingProfile()
+                                navController.navigate(ROUTE_PROFILE_EDIT)
+                            }
                         )
                     }
                 }
@@ -187,10 +194,12 @@ fun AppNavHost(
                 isError = profileUiState.isError,
                 onRetry = onRetryProfile
             ) {
-                profileUiState.profile?.let { profile ->
+                val editState = profileUiState.editState
+                if (editState != null) {
                     ProfileEditScreen(
-                        profile = profile,
+                        editState = editState,
                         isSaving = profileUiState.isSaving,
+                        onFieldChange = onEditProfileFieldChange,
                         onSave = onSaveProfile
                     )
                 }
