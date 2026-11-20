@@ -20,14 +20,14 @@ import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
 import com.example.drivematch.component.CarRow
 import com.example.drivematch.component.CenteredMessage
-import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
+import com.example.drivematch.viewmodel.CarsUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavouritesScreen(
-    cars: List<Car>,
+    uiState: CarsUiState,
     onCarClick: (Car) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -45,7 +45,7 @@ fun FavouritesScreen(
             )
         }
     ) { innerPadding ->
-        if (cars.isEmpty()) {
+        if (uiState.favouriteCars.isEmpty()) {
             CenteredMessage(
                 text = stringResource(R.string.favs_empty),
                 modifier = Modifier.padding(innerPadding)
@@ -58,7 +58,7 @@ fun FavouritesScreen(
                 contentPadding = PaddingValues(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(cars, key = { it.id }) { car ->
+                items(uiState.favouriteCars, key = { it.id }) { car ->
                     CarRow(car = car, onCarClick = { onCarClick(car) })
                 }
             }
@@ -70,7 +70,10 @@ fun FavouritesScreen(
 @Composable
 fun FavouritesScreenPreviewRu() {
     AppTheme {
-        FavouritesScreen(cars = carsData.take(3), onCarClick = {})
+        FavouritesScreen(
+            uiState = CarsUiState(favouriteIds = emptySet(), isLoading = false),
+            onCarClick = {}
+        )
     }
 }
 
@@ -78,6 +81,9 @@ fun FavouritesScreenPreviewRu() {
 @Composable
 fun FavouritesScreenPreviewEn() {
     AppTheme {
-        FavouritesScreen(cars = carsData.take(3), onCarClick = {})
+        FavouritesScreen(
+            uiState = CarsUiState(favouriteIds = emptySet(), isLoading = false),
+            onCarClick = {}
+        )
     }
 }

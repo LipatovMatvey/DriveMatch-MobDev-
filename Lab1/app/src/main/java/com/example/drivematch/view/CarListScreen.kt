@@ -2,17 +2,11 @@ package com.example.drivematch.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,26 +14,22 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.example.drivematch.R
+import com.example.drivematch.component.CarRow
 import com.example.drivematch.component.CenteredMessage
 import com.example.drivematch.data.carsData
 import com.example.drivematch.model.Car
 import com.example.drivematch.ui.theme.AppTheme
-import com.example.drivematch.component.CarRow
+import com.example.drivematch.viewmodel.CarsUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarListScreen(
-    cars: List<Car>,
+    uiState: CarsUiState,
     onCarClick: (Car) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -57,7 +47,7 @@ fun CarListScreen(
             )
         }
     ) { innerPadding ->
-        if (cars.isEmpty()) {
+        if (uiState.cars.isEmpty()) {
             CenteredMessage(
                 text = stringResource(R.string.cars_empty),
                 modifier = Modifier.padding(innerPadding)
@@ -70,7 +60,7 @@ fun CarListScreen(
                 contentPadding = PaddingValues(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(cars, key = { it.id }) { car ->
+                items(uiState.cars, key = { it.id }) { car ->
                     CarRow(car = car, onCarClick = { onCarClick(car) })
                 }
             }
@@ -89,7 +79,10 @@ fun CarListScreen(
 fun CarListScreenPreviewRu() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            CarListScreen(cars = carsData, onCarClick = {})
+            CarListScreen(
+                uiState = CarsUiState(cars = carsData, isLoading = false),
+                onCarClick = {}
+            )
         }
     }
 }
@@ -105,7 +98,10 @@ fun CarListScreenPreviewRu() {
 fun CarListScreenPreviewEn() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            CarListScreen(cars = carsData, onCarClick = {})
+            CarListScreen(
+                uiState = CarsUiState(cars = carsData, isLoading = false),
+                onCarClick = {}
+            )
         }
     }
 }
@@ -121,7 +117,10 @@ fun CarListScreenPreviewEn() {
 fun CarListScreenEmptyPreviewEn() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            CarListScreen(cars = emptyList(), onCarClick = {})
+            CarListScreen(
+                uiState = CarsUiState(cars = emptyList(), isLoading = false),
+                onCarClick = {}
+            )
         }
     }
 }
@@ -137,7 +136,10 @@ fun CarListScreenEmptyPreviewEn() {
 fun CarListScreenEmptyPreviewRu() {
     AppTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            CarListScreen(cars = emptyList(), onCarClick = {})
+            CarListScreen(
+                uiState = CarsUiState(cars = emptyList(), isLoading = false),
+                onCarClick = {}
+            )
         }
     }
 }

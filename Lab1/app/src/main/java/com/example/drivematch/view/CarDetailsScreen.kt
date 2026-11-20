@@ -99,10 +99,7 @@ fun CarDetailsScreen(
         OutlinedCard(modifier = Modifier.fillMaxWidth()) {
             SpecRow(R.string.spec_power, stringResource(R.string.value_hp, car.horsepower))
             HorizontalDivider()
-            SpecRow(
-                R.string.spec_engine_volume,
-                stringResource(R.string.value_volume, car.engineVolume)
-            )
+            SpecRow(R.string.spec_engine_volume, stringResource(R.string.value_volume, car.engineVolume))
             HorizontalDivider()
             SpecRow(R.string.spec_transmission_type, stringResource(car.transmissionType.labelRes()))
             HorizontalDivider()

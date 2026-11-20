@@ -11,6 +11,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -21,19 +22,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.drivematch.R
+import com.example.drivematch.model.Car
+import com.example.drivematch.model.ProfileField
 import com.example.drivematch.view.CarDetailsScreen
 import com.example.drivematch.view.CarListScreen
 import com.example.drivematch.view.CarsharingAboutScreen
 import com.example.drivematch.view.FavouritesScreen
-import androidx.compose.ui.Modifier
-import com.example.drivematch.model.Car
-import com.example.drivematch.model.ProfileField
-import com.example.drivematch.model.User
 import com.example.drivematch.view.ProfileEditScreen
 import com.example.drivematch.view.ProfileScreen
 import com.example.drivematch.view.RentScreen
 import com.example.drivematch.viewmodel.CarsUiState
-import com.example.drivematch.viewmodel.ProfileEditState
 import com.example.drivematch.viewmodel.ProfileUiState
 import com.example.drivematch.viewmodel.RentalsUiState
 
@@ -112,20 +110,20 @@ fun AppNavHost(
                     Destination.ABOUT -> LoadGate(uiState.isLoading, uiState.isError, onRetryLoad) {
                         CarsharingAboutScreen(
                             nameOrganizations = NAME_ORGANIZATION,
-                            carsCount = uiState.cars.size
+                            uiState = uiState
                         )
                     }
 
                     Destination.CARS -> LoadGate(uiState.isLoading, uiState.isError, onRetryLoad) {
                         CarListScreen(
-                            cars = uiState.cars,
+                            uiState = uiState,
                             onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                         )
                     }
 
                     Destination.FAVOURITES -> LoadGate(uiState.isLoading, uiState.isError, onRetryLoad) {
                         FavouritesScreen(
-                            cars = uiState.favouriteCars,
+                            uiState = uiState,
                             onCarClick = { car -> navController.navigate(carRoute(car.id)) }
                         )
                     }

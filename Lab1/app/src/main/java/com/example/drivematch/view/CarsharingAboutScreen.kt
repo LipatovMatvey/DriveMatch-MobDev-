@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -27,14 +25,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
 import com.example.drivematch.component.NAME_ORGANIZATION
-import com.example.drivematch.ui.theme.AppTheme
 import com.example.drivematch.component.StatCard
+import com.example.drivematch.data.carsData
+import com.example.drivematch.ui.theme.AppTheme
+import com.example.drivematch.viewmodel.CarsUiState
 
 @Composable
 fun CarsharingAboutScreen(
     modifier: Modifier = Modifier,
     nameOrganizations: String,
-    carsCount: Int
+    uiState: CarsUiState
 ) {
     Column(
         modifier = modifier
@@ -62,14 +62,13 @@ fun CarsharingAboutScreen(
                 modifier = Modifier.weight(1f)
             )
             StatCard(
-                value = carsCount.toString(),
+                value = uiState.cars.size.toString(),
                 label = stringResource(R.string.home_stat_cars_label),
                 modifier = Modifier.weight(1f)
             )
             StatCard(
                 value = stringResource(R.string.home_stat_support_value),
                 label = stringResource(R.string.home_stat_support_label),
-
                 modifier = Modifier.weight(1f)
             )
         }
@@ -117,7 +116,7 @@ fun CarsharingAboutScreenPreviewEn() {
         Surface(color = MaterialTheme.colorScheme.background) {
             CarsharingAboutScreen(
                 nameOrganizations = NAME_ORGANIZATION,
-                carsCount = 256
+                uiState = CarsUiState(cars = carsData)
             )
         }
     }
@@ -136,7 +135,7 @@ fun CarsharingAboutScreenPreviewRu() {
         Surface(color = MaterialTheme.colorScheme.background) {
             CarsharingAboutScreen(
                 nameOrganizations = NAME_ORGANIZATION,
-                carsCount = 256
+                uiState = CarsUiState(cars = carsData)
             )
         }
     }
