@@ -3,7 +3,6 @@ package com.example.drivematch.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.drivematch.data.CarRepository
 import com.example.drivematch.data.RentalRepository
 import com.example.drivematch.model.Car
 import com.example.drivematch.model.RentalItem
@@ -22,8 +21,7 @@ sealed interface RentalEvent {
 }
 
 class RentalsViewModel(
-    private val rentalRepository: RentalRepository,
-    private val carRepository: CarRepository
+    private val rentalRepository: RentalRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RentalsUiState())
@@ -39,7 +37,7 @@ class RentalsViewModel(
     fun loadRentals() {
         viewModelScope.launch {
             try {
-                _uiState.update { it.copy(items = loadItems()) }
+                _uiState.update { it.copy(items = rentalRepository.getRentalItems()) }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -69,17 +67,6 @@ class RentalsViewModel(
                 _uiState.update { it.copy(isSubmitting = false) }
             }
         }
-    }
-
-    private suspend fun loadItems(): List<RentalItem> {
-        val rentals = rentalRepository.getRentals()
-        if (rentals.isEmpty()) return emptyList()
-        val carsById = carRepository.getCars().associateBy { it.id }
-        return rentals
-            .mapNotNull { rental ->
-                carsById[rental.carId]?.let { car -> RentalItem(rental, car) }
-            }
-            .asReversed()
     }
 
     fun selectCar(car: Car) {

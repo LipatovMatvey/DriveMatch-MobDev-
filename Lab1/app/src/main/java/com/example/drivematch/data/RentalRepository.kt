@@ -1,6 +1,7 @@
 package com.example.drivematch.data
 
 import com.example.drivematch.model.Rental
+import com.example.drivematch.model.RentalItem
 
 interface RentalRepository {
 
@@ -13,6 +14,11 @@ interface RentalRepository {
      * Создание аренды
      */
     suspend fun createRental(carId: Int, hours: Int): Rental
+
+    /**
+     * Список аренд вместе с данными автомобилей
+     */
+    suspend fun getRentalItems(): List<RentalItem>
 }
 
 object InMemoryRentalRepository : RentalRepository {
@@ -30,5 +36,14 @@ object InMemoryRentalRepository : RentalRepository {
         )
         rentals.add(rental)
         return rental
+    }
+
+    override suspend fun getRentalItems(): List<RentalItem> {
+        val carsById = carsData.associateBy { it.id }
+        return rentals
+            .mapNotNull { rental ->
+                carsById[rental.carId]?.let { car -> RentalItem(rental, car) }
+            }
+            .asReversed()
     }
 }

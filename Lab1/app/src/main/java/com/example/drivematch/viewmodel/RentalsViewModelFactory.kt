@@ -2,12 +2,10 @@ package com.example.drivematch.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.drivematch.data.CarRepository
 import com.example.drivematch.data.RentalRepository
 
 class RentalsViewModelFactory(
-    private val rentalRepository: RentalRepository,
-    private val carRepository: CarRepository
+    private val rentalRepository: RentalRepository
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -15,6 +13,6 @@ class RentalsViewModelFactory(
         require(modelClass.isAssignableFrom(RentalsViewModel::class.java)) {
             "Unknown ViewModel class: ${modelClass.name}"
         }
-        return RentalsViewModel(rentalRepository, carRepository) as T
+        return RentalsViewModel(rentalRepository) as T
     }
 }

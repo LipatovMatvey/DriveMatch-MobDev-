@@ -18,6 +18,6 @@ object AppContainer {
     }
 
     val rentalRepository: RentalRepository by lazy {
-        NetworkRentalRepository(RentalApi(httpClient, BASE_URL))
+        NetworkRentalRepository(RentalApi(httpClient, BASE_URL), carRepository)
     }
 }
