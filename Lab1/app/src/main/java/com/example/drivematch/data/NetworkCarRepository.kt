@@ -9,10 +9,6 @@ class NetworkCarRepository(
     private val baseUrl: String
 ) : CarRepository {
 
-    private var cache: List<Car>? = null
-
     override suspend fun getCars(): List<Car> =
-        cache ?: api.getCars()
-            .map { it.toModel(baseUrl) }
-            .also { cache = it }
+        api.getCars().map { it.toModel(baseUrl) }
 }

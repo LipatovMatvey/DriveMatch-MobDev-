@@ -5,19 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.drivematch.data.UserRepository
 import com.example.drivematch.model.ProfileField
-import com.example.drivematch.model.User
 import com.example.drivematch.model.hasBlankFields
 import com.example.drivematch.model.normalized
 import com.example.drivematch.model.validate
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 
 sealed interface ProfileEvent {
     data object Saved : ProfileEvent
@@ -33,34 +32,6 @@ class ProfileViewModel(
 
     private val _events = Channel<ProfileEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
-
-    fun onSave() {
-        val editState = _uiState.value.editState ?: return
-        val currentProfile = _uiState.value.profile ?: return
-        if (!editState.isValid || _uiState.value.isSaving) return
-        val user = currentProfile.copy(
-            fullName = editState.fullName.trim(),
-            city = editState.city.trim(),
-            licenseCategory = editState.licenseCategory.trim(),
-            licenseNumber = editState.licenseNumber.trim(),
-            licenseValidUntil = editState.licenseValidUntil.trim()
-        )
-        _uiState.update { it.copy(isSaving = true) }
-        viewModelScope.launch {
-            try {
-                val saved = repository.updateUser(user.normalized())
-                _uiState.update { it.copy(profile = saved, editState = null) }
-                _events.trySend(ProfileEvent.Saved)
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                Log.e("ProfileViewModel", "save failed", e)
-                _events.trySend(ProfileEvent.SaveFailed)
-            } finally {
-                _uiState.update { it.copy(isSaving = false) }
-            }
-        }
-    }
 
     private var loadJob: Job? = null
     init {
@@ -110,9 +81,7 @@ class ProfileViewModel(
             ProfileField.LICENSE_CATEGORY -> current.copy(licenseCategory = value)
             ProfileField.LICENSE_NUMBER -> current.copy(licenseNumber = value)
             ProfileField.LICENSE_VALID_UNTIL -> current.copy(licenseValidUntil = value)
-            else -> current
         }
-
         val draftUser = _uiState.value.profile?.copy(
             fullName = updated.fullName.trim(),
             city = updated.city.trim(),
@@ -122,7 +91,34 @@ class ProfileViewModel(
         )
         val errors = draftUser?.validate() ?: emptyMap()
         val isValid = errors.isEmpty() && draftUser?.hasBlankFields() == false
-
         _uiState.update { it.copy(editState = updated.copy(errors = errors, isValid = isValid)) }
+    }
+
+    fun onSave() {
+        val editState = _uiState.value.editState ?: return
+        val currentProfile = _uiState.value.profile ?: return
+        if (!editState.isValid || _uiState.value.isSaving) return
+        val user = currentProfile.copy(
+            fullName = editState.fullName.trim(),
+            city = editState.city.trim(),
+            licenseCategory = editState.licenseCategory.trim(),
+            licenseNumber = editState.licenseNumber.trim(),
+            licenseValidUntil = editState.licenseValidUntil.trim()
+        )
+        _uiState.update { it.copy(isSaving = true) }
+        viewModelScope.launch {
+            try {
+                val saved = repository.updateUser(user.normalized())
+                _uiState.update { it.copy(profile = saved, editState = null) }
+                _events.trySend(ProfileEvent.Saved)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e("ProfileViewModel", "save failed", e)
+                _events.trySend(ProfileEvent.SaveFailed)
+            } finally {
+                _uiState.update { it.copy(isSaving = false) }
+            }
+        }
     }
 }

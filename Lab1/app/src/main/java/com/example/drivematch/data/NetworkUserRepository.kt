@@ -10,6 +10,7 @@ class NetworkUserRepository(
 ) : UserRepository {
 
     override suspend fun getUser(): User = api.getUser().toModel()
+
     override suspend fun updateUser(user: User): User =
         api.updateUser(user.toDto()).toModel()
 }

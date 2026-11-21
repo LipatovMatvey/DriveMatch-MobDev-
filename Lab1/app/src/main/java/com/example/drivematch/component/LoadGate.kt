@@ -33,7 +33,6 @@ fun LoadGate(
         ) {
             CircularProgressIndicator()
         }
-
         isError -> Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -51,7 +50,6 @@ fun LoadGate(
                 Text(stringResource(R.string.retry))
             }
         }
-
         else -> content()
     }
 }
