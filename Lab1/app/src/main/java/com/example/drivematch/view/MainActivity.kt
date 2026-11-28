@@ -71,6 +71,8 @@ fun CarsharingContainer(
     val profileSavedMessage = stringResource(R.string.profile_saved)
     val profileSaveFailedMessage = stringResource(R.string.profile_save_failed)
     val rentFailedMessage = stringResource(R.string.rent_failed)
+    val topUpFailedMessage = stringResource(R.string.balance_top_up_failed)
+    val balanceToppedUpMessage = stringResource(R.string.balance_topped_up)
     val scope = rememberCoroutineScope()
     val showMessage: (String) -> Unit = { message ->
         snackbarHostState.currentSnackbarData?.dismiss()
@@ -113,6 +115,8 @@ fun CarsharingContainer(
                     showMessage(profileSavedMessage)
                 }
                 ProfileEvent.SaveFailed -> showMessage(profileSaveFailedMessage)
+                ProfileEvent.BalanceToppedUp -> showMessage(balanceToppedUpMessage)
+                ProfileEvent.TopUpFailed -> showMessage(topUpFailedMessage)
             }
         }
     }
@@ -147,6 +151,7 @@ fun CarsharingContainer(
             onConfirmRent = rentalsViewModel::onConfirmRent,
             onStartEditingProfile = profileViewModel::startEditing,
             onEditProfileFieldChange = profileViewModel::onFieldChange,
+            onTopUpProfile = profileViewModel::onTopUp,
             onSaveProfile = profileViewModel::onSave,
             onRetryLoad = carsViewModel::loadCars,
             onRetryProfile = {
