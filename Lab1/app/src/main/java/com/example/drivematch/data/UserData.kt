@@ -9,5 +9,6 @@ val sampleUser1 = User(
     city = "Москва",
     licenseCategory = "B, B1",
     licenseNumber = "99 12 345678",
-    licenseValidUntil = "20.06.2032"
+    licenseValidUntil = "20.06.2032",
+    balance = 0
 )
