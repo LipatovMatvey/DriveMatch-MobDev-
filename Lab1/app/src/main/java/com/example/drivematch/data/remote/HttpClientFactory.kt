@@ -12,7 +12,7 @@ fun createHttpClient(): HttpClient = HttpClient(OkHttp) {
         json(Json { ignoreUnknownKeys = true })
     }
     install(HttpTimeout) {
-        connectTimeoutMillis = 5_000
+        connectTimeoutMillis = 3_000
         requestTimeoutMillis = 10_000
     }
     expectSuccess = true
