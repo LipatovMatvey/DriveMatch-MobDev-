@@ -101,4 +101,11 @@
     <string name="error_license_expired">The license has expired</string>
     <string name="profile_birth_date_readonly">Birth date can\'t be changed</string>
     <string name="profile_date_hint">Format: DD.MM.YYYY</string>
+
+    <string name="profile_balance">Balance</string>
+    <string name="profile_balance_value">%d ₽</string>
+    <string name="profile_top_up">Top up 100 ₽</string>
+    <string name="balance_topped_up">Balance topped up</string>
+
+    <string name="balance_top_up_failed">Failed to top up balance</string>
 </resources>

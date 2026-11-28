@@ -102,4 +102,11 @@
     <string name="error_license_expired">Срок действия прав истёк</string>
     <string name="profile_birth_date_readonly">Дату рождения изменить нельзя</string>
     <string name="profile_date_hint">Формат: ДД.ММ.ГГГГ</string>
+
+    <string name="profile_balance">Баланс</string>
+    <string name="profile_balance_value">%d ₽</string>
+    <string name="profile_top_up">Пополнить на 100 ₽</string>
+    <string name="balance_topped_up">Вы пополнили баланс</string>
+
+    <string name="balance_top_up_failed">Не удалось пополнить баланс</string>
 </resources>
