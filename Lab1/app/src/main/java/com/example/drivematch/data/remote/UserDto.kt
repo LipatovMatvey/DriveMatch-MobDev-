@@ -11,8 +11,12 @@ data class UserDto(
     val city: String,
     val licenseCategory: String,
     val licenseNumber: String,
-    val licenseValidUntil: String
+    val licenseValidUntil: String,
+    val balance: Int = 0
 )
+
+@Serializable
+data class TopUpRequestDto(val amount: Int)
 
 fun UserDto.toModel(): User = User(
     id = id,
@@ -21,7 +25,8 @@ fun UserDto.toModel(): User = User(
     city = city,
     licenseCategory = licenseCategory,
     licenseNumber = licenseNumber,
-    licenseValidUntil = licenseValidUntil
+    licenseValidUntil = licenseValidUntil,
+    balance = balance
 )
 
 fun User.toDto(): UserDto = UserDto(
@@ -31,5 +36,6 @@ fun User.toDto(): UserDto = UserDto(
     city = city,
     licenseCategory = licenseCategory,
     licenseNumber = licenseNumber,
-    licenseValidUntil = licenseValidUntil
+    licenseValidUntil = licenseValidUntil,
+    balance = balance
 )

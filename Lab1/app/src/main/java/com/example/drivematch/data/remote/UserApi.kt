@@ -3,6 +3,7 @@ package com.example.drivematch.data.remote
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -18,5 +19,11 @@ class UserApi(
         client.put("$baseUrl/profile") {
             contentType(ContentType.Application.Json)
             setBody(dto)
+        }.body()
+
+    suspend fun topUp(amount: Int): UserDto =
+        client.post("$baseUrl/profile/balance/top-up") {
+            contentType(ContentType.Application.Json)
+            setBody(TopUpRequestDto(amount))
         }.body()
 }
