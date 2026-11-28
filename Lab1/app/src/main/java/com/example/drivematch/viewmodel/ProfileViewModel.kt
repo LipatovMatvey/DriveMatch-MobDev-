@@ -21,7 +21,11 @@ import kotlin.coroutines.cancellation.CancellationException
 sealed interface ProfileEvent {
     data object Saved : ProfileEvent
     data object SaveFailed : ProfileEvent
+    data object BalanceToppedUp : ProfileEvent
+    data object TopUpFailed : ProfileEvent
 }
+
+const val TOP_UP_AMOUNT = 100
 
 class ProfileViewModel(
     private val repository: UserRepository,
@@ -50,6 +54,26 @@ class ProfileViewModel(
             } catch (e: Exception) {
                 Log.e("ProfileViewModel", "load failed", e)
                 _uiState.update { it.copy(isLoading = false, isError = true) }
+            }
+        }
+    }
+
+    private var topUpJob: Job? = null
+
+    fun onTopUp() {
+        if (topUpJob?.isActive == true) return
+        topUpJob = viewModelScope.launch {
+            try {
+                val updated = repository.topUp(TOP_UP_AMOUNT)
+                _uiState.update { state ->
+                    state.copy(profile = state.profile?.copy(balance = updated.balance))
+                }
+                _events.trySend(ProfileEvent.BalanceToppedUp)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e("ProfileViewModel", "top up failed", e)
+                _events.trySend(ProfileEvent.TopUpFailed)
             }
         }
     }
