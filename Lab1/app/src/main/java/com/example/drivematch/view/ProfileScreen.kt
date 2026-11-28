@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -21,7 +22,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -36,15 +39,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.drivematch.R
 import com.example.drivematch.component.SpecRow
-import com.example.drivematch.data.sampleUser1
-import com.example.drivematch.model.RentalItem
-import com.example.drivematch.model.User
-import com.example.drivematch.ui.theme.AppTheme
-import androidx.compose.material3.ListItem
 import com.example.drivematch.data.sampleCar1
+import com.example.drivematch.data.sampleUser1
 import com.example.drivematch.model.Rental
+import com.example.drivematch.model.RentalItem
+import com.example.drivematch.ui.theme.AppTheme
 import com.example.drivematch.viewmodel.ProfileUiState
-import com.example.drivematch.viewmodel.RentalsUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,6 +52,7 @@ fun ProfileScreen(
     uiState: ProfileUiState,
     rentals: List<RentalItem>,
     onEditClick: () -> Unit,
+    onTopUpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val profile = uiState.profile
@@ -112,6 +113,8 @@ fun ProfileScreen(
                 SpecRow(R.string.profile_license_number, profile.licenseNumber)
                 HorizontalDivider()
                 SpecRow(R.string.profile_license_valid_until, profile.licenseValidUntil)
+                HorizontalDivider()
+                SpecRow(R.string.profile_balance, stringResource(R.string.profile_balance_value, profile.balance))
             }
             Spacer(Modifier.height(24.dp))
             Text(
@@ -150,6 +153,18 @@ fun ProfileScreen(
                 }
             }
             Spacer(Modifier.height(24.dp))
+            OutlinedButton(
+                onClick = onTopUpClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = null)
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    text = stringResource(R.string.profile_top_up),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+            Spacer(Modifier.height(8.dp))
             Button(
                 onClick = onEditClick,
                 modifier = Modifier.fillMaxWidth()
@@ -172,7 +187,8 @@ fun ProfileScreenPreviewRu() {
         ProfileScreen(
             uiState = ProfileUiState(profile = sampleUser1),
             rentals = listOf(RentalItem(Rental(1, 1, 3, 1050), sampleCar1)),
-            onEditClick = {}
+            onEditClick = {},
+            onTopUpClick = {}
         )
     }
 }
@@ -184,7 +200,8 @@ fun ProfileScreenPreviewEn() {
         ProfileScreen(
             uiState = ProfileUiState(profile = sampleUser1),
             rentals = emptyList(),
-            onEditClick = {}
+            onEditClick = {},
+            onTopUpClick = {}
         )
     }
 }
