@@ -94,6 +94,7 @@ fun AppNavHost(
     onConfirmRent: () -> Unit,
     onStartEditingProfile: () -> Unit,
     onEditProfileFieldChange: (ProfileField, String) -> Unit,
+    onTopUpProfile: () -> Unit,
     onSaveProfile: () -> Unit,
     onRetryLoad: () -> Unit,
     onRetryProfile: () -> Unit,
@@ -139,7 +140,8 @@ fun AppNavHost(
                             onEditClick = {
                                 onStartEditingProfile()
                                 navController.navigate(ROUTE_PROFILE_EDIT)
-                            }
+                            },
+                            onTopUpClick = onTopUpProfile,
                         )
                     }
                 }
