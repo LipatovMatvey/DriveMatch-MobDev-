@@ -11,6 +11,7 @@ class NetworkUserRepository(
 
     override suspend fun getUser(): User = api.getUser().toModel()
 
-    override suspend fun updateUser(user: User): User =
-        api.updateUser(user.toDto()).toModel()
+    override suspend fun updateUser(user: User): User = api.updateUser(user.toDto()).toModel()
+
+    override suspend fun topUp(amount: Int): User = api.topUp(amount).toModel()
 }
