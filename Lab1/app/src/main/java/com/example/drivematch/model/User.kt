@@ -34,7 +34,12 @@ data class User(
     /**
      * Срок действия ВУ
      */
-    val licenseValidUntil: String
+    val licenseValidUntil: String,
+
+    /**
+     * Баланс пользователя
+     */
+    val balance: Int = 0
 )
 
 fun User.hasBlankFields(): Boolean = listOf(
